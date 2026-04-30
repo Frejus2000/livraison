@@ -151,280 +151,76 @@ body { font-family: var(--font-sans); background: #f0faf6; padding: 32px; }
 .chart-bar { background: #e1f5ee; border-radius: 3px 3px 0 0; flex: 1; }
 .chart-bar.active { background: #0F6E56; }
 .chart-lbl { font-size: 8px; color: #a8a29e; text-align: center; margin-top: 3px; }
+
+/* ── Auth layout (Partenaire) ── */
+.auth-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: 540px; }
+.auth-side-left { background: #0F6E56; padding: 48px 40px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.auth-side-left::before { content: ''; position: absolute; top: -80px; right: -80px; width: 280px; height: 280px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+.auth-side-left::after { content: ''; position: absolute; bottom: -60px; left: -60px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,0.06); }
+.auth-side-right { background: #fff; padding: 40px 44px; display: flex; flex-direction: column; justify-content: center; }
+.auth-logo-wrap { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 40px; position: relative; z-index: 1; }
+.auth-logo-mark-w { width: 36px; height: 36px; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(255,255,255,0.25); }
+.auth-logo-text-w { font-size: 18px; font-weight: 700; color: white; letter-spacing: -0.5px; }
+.auth-hero-title { font-size: 26px; font-weight: 700; color: white; line-height: 1.25; margin-bottom: 12px; position: relative; z-index: 1; }
+.auth-hero-sub { font-size: 12px; color: rgba(255,255,255,0.65); line-height: 1.6; position: relative; z-index: 1; }
+.auth-features { display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
+.auth-feature { display: flex; align-items: center; gap: 10px; font-size: 11px; color: rgba(255,255,255,0.8); }
+.auth-feature-icon { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.form-label-a { font-size: 10px; font-weight: 600; color: #78716c; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 5px; display: block; }
+.form-field-a { width: 100%; border: 0.5px solid #d6d3d1; border-radius: 8px; padding: 9px 12px; font-size: 12px; font-family: var(--font-sans); color: #1c1917; background: #fafaf9; }
+.form-field-a-active { border: 1.5px solid #0F6E56; background: #fff; }
+.btn-auth { width: 100%; padding: 11px; border: none; border-radius: 9px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--font-sans); margin-bottom: 10px; }
+.btn-auth-green { background: #0F6E56; color: white; }
+.btn-auth-outline { background: #fff; border: 0.5px solid #d6d3d1; color: #1c1917; font-size: 11px; padding: 9px; width: 100%; border-radius: 9px; cursor: pointer; font-family: var(--font-sans); margin-bottom: 10px; }
+.divider-auth { display: flex; align-items: center; gap: 10px; margin: 14px 0; font-size: 10px; color: #a8a29e; }
+.divider-auth::before, .divider-auth::after { content: ''; flex: 1; height: 0.5px; background: #e7e5e4; }
+.auth-tabs { display: flex; gap: 0; background: #f5f5f4; border-radius: 9px; padding: 3px; margin-bottom: 22px; }
+.auth-tab { flex: 1; text-align: center; padding: 7px; font-size: 11px; font-weight: 500; border-radius: 7px; cursor: pointer; color: #78716c; }
+.auth-tab.active { background: #fff; color: #1c1917; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.form-row-a { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.form-group-a { margin-bottom: 14px; }
+.pwd-strength { display: flex; gap: 3px; margin-top: 5px; }
+.pwd-bar { flex: 1; height: 3px; border-radius: 2px; background: #e7e5e4; }
+.pwd-bar.fill-green { background: #0F6E56; }
+/* ── Settings layout ── */
+.settings-layout-p { display: flex; min-height: 560px; }
+.settings-main-p { flex: 1; padding: 24px 28px; background: #f9fafb; overflow: hidden; }
+.settings-title-p { font-size: 16px; font-weight: 700; color: #1c1917; }
+.settings-sub-p { font-size: 11px; color: #78716c; margin-top: 2px; }
+.settings-grid-p { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
+.settings-nav-p { display: flex; flex-direction: column; gap: 2px; }
+.settings-nav-item-p { display: flex; align-items: center; gap: 9px; padding: 9px 11px; border-radius: 8px; font-size: 11px; color: #78716c; cursor: pointer; border: 0.5px solid transparent; }
+.settings-nav-item-p.active { background: #fff; border-color: #e7e5e4; color: #1c1917; font-weight: 500; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.settings-nav-item-p svg { width: 14px; height: 14px; flex-shrink: 0; }
+.settings-nav-icon-p { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.settings-card-p { background: #fff; border: 0.5px solid #e7e5e4; border-radius: 10px; padding: 18px 20px; margin-bottom: 14px; }
+.settings-card-title-p { font-size: 12px; font-weight: 600; color: #1c1917; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 0.5px solid #e7e5e4; display: flex; align-items: center; justify-content: space-between; }
+.settings-field-row-p { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.settings-field-p { margin-bottom: 12px; }
+.s-label-p { font-size: 10px; font-weight: 600; color: #78716c; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; display: block; }
+.s-input-p { width: 100%; border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 7px 10px; font-size: 11px; font-family: var(--font-sans); color: #1c1917; background: #fafaf9; }
+.s-input-p-active { border-color: #0F6E56; background: #fff; }
+.notif-row-p { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 0.5px solid #e7e5e4; }
+.notif-row-p:last-child { border-bottom: none; }
+.notif-label-p { font-size: 11px; color: #1c1917; }
+.notif-sub-p { font-size: 10px; color: #78716c; margin-top: 1px; }
+.mini-stat-p { text-align: center; background: #f5f5f4; border-radius: 8px; padding: 10px 12px; }
+.mini-stat-val-p { font-size: 18px; font-weight: 700; color: #1c1917; }
+.mini-stat-lbl-p { font-size: 9px; color: #78716c; margin-top: 2px; }
+.zone-badge-p { display: inline-flex; align-items: center; gap: 5px; background: #e1f5ee; border: 0.5px solid #9FE1CB; border-radius: 20px; padding: 4px 10px; font-size: 10px; color: #0F6E56; font-weight: 500; }
+.pwd-display-p { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: #f5f5f4; border-radius: 7px; border: 0.5px solid #e7e5e4; font-size: 12px; color: #78716c; letter-spacing: 3px; }
+.danger-zone-p { background: #fcebeb; border: 0.5px solid #F7C1C1; border-radius: 10px; padding: 14px 18px; }
+.nav-section-p { font-size: 9px; font-weight: 600; color: #a8a29e; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 8px 4px; }
+.nav-badge-p { margin-left: auto; background: #E24B4A; color: white; font-size: 9px; border-radius: 10px; padding: 1px 6px; font-weight: 600; }
+.plan-card-p { border: 0.5px solid #e7e5e4; border-radius: 8px; padding: 12px; cursor: pointer; }
+.plan-card-p.selected { border-color: #0F6E56; background: #e1f5ee; }
+
 </style>
 </head>
 <body>
 
 <div class="page-title">Portail Partenaire — SwiftDrop</div>
 <div class="page-sub">Interface web tablette / PC · Next.js + Tailwind CSS</div>
-
-
-<!-- ═══════════════════════════════════════════════════
-     ÉCRAN 0 — Connexion Partenaire (2 onglets)
-═══════════════════════════════════════════════════ -->
-<div class="section-tag">2. Connexion / Inscription — Portail Partenaire</div>
-<div class="browser-frame">
-  <div class="browser-bar">
-    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
-    <div class="browser-url">partenaire.swiftdrop.bj/auth</div>
-  </div>
-  <div class="auth-layout">
-
-    <!-- Left -->
-    <div class="auth-side-left">
-      <div>
-        <div class="auth-logo-wrap">
-          <div class="auth-logo-mark">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/>
-              <path d="M5.5 9L9 5.5L12.5 9L10.5 9L10.5 12.5L7.5 12.5L7.5 9Z" fill="white"/>
-            </svg>
-          </div>
-          <div class="auth-logo-text">SwiftDrop</div>
-        </div>
-        <div style="font-size:10px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:16px; position:relative; z-index:1;">Portail Partenaire</div>
-        <div class="auth-hero-title">Développez votre<br>activité avec nous</div>
-        <div class="auth-hero-sub" style="max-width:260px;">Restaurants, pharmacies, supermarchés — gérez vos livraisons, vérifiez vos livreurs et suivez vos commandes en temps réel.</div>
-      </div>
-      <div class="auth-features">
-        <div class="auth-feature">
-          <div class="auth-feature-icon">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/><rect x="7" y="1" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/><rect x="1" y="7" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/><rect x="7" y="7" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/></svg>
-          </div>
-          Dashboard commandes en direct
-        </div>
-        <div class="auth-feature">
-          <div class="auth-feature-icon">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="2" width="9" height="9" rx="2" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><path d="M5 6.5h3M6.5 5v3" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/></svg>
-          </div>
-          Scanner QR & vérification livreur
-        </div>
-        <div class="auth-feature">
-          <div class="auth-feature-icon">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><path d="M6.5 3.5v3l2 1.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" stroke-linecap="round"/></svg>
-          </div>
-          Suivi GPS temps réel
-        </div>
-        <div class="auth-feature">
-          <div class="auth-feature-icon">
-            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 9L4.5 4l2 3.5L8 5l2.5 4" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" stroke-linecap="round"/></svg>
-          </div>
-          Statistiques & revenus mensuels
-        </div>
-      </div>
-      <!-- Partner logos mockup -->
-      <div style="position:absolute; bottom:24px; right:20px; z-index:1; display:flex; flex-direction:column; gap:6px;">
-        <div style="font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:2px;">Ils nous font confiance</div>
-        <div style="display:flex; gap:6px;">
-          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">La Terrasse</div>
-          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">Pharmaco+</div>
-        </div>
-        <div style="display:flex; gap:6px;">
-          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">TopMarché</div>
-          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">12+ autres</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right form -->
-    <div class="auth-side-right">
-      <div style="max-width:360px; margin:0 auto; width:100%;">
-        <div style="margin-bottom:20px;">
-          <div style="font-size:20px; font-weight:700; color:var(--text); margin-bottom:4px;">Portail Partenaire</div>
-          <div style="font-size:11px; color:var(--text2);">Gérez vos livraisons depuis Cotonou, Bénin</div>
-        </div>
-
-        <!-- Tabs -->
-        <div class="auth-tabs">
-          <div class="auth-tab">Se connecter</div>
-          <div class="auth-tab active">Créer un compte</div>
-        </div>
-
-        <!-- INSCRIPTION FORM (active tab) -->
-        <div class="form-row">
-          <div>
-            <label class="form-label">Nom de l'établissement</label>
-            <input class="form-field form-field-mock-active" value="Le Bon Goût" type="text" readonly/>
-          </div>
-          <div>
-            <label class="form-label">Type d'établissement</label>
-            <div class="form-field" style="color:var(--green); background:#fff; border-color:var(--green); display:flex; align-items:center; justify-content:space-between;">
-              <span>Restaurant</span><span>▾</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Adresse complète</label>
-          <input class="form-field" value="Fidjrossè, Cotonou, Bénin" type="text" readonly/>
-        </div>
-
-        <div class="form-row">
-          <div>
-            <label class="form-label">Téléphone (principal)</label>
-            <input class="form-field" value="+229 97 23 45 67" type="text" readonly/>
-          </div>
-          <div>
-            <label class="form-label">Téléphone (Mobile Money)</label>
-            <input class="form-field" value="+229 97 23 45 67" type="text" readonly/>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div>
-            <label class="form-label">E-mail de connexion</label>
-            <input class="form-field" value="contact@lebongout.bj" type="text" readonly/>
-          </div>
-          <div>
-            <label class="form-label">Mot de passe</label>
-            <div style="position:relative;">
-              <input class="form-field" value="••••••••" type="text" readonly style="padding-right:36px;"/>
-              <div style="position:absolute; right:10px; top:50%; transform:translateY(-50%);">
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><ellipse cx="6.5" cy="6.5" rx="4.5" ry="3" stroke="var(--text3)" stroke-width="1.2"/><circle cx="6.5" cy="6.5" r="1.3" fill="var(--text3)"/></svg>
-              </div>
-            </div>
-            <!-- Password strength -->
-            <div class="pwd-strength" style="margin-top:4px;">
-              <div class="pwd-bar fill-green"></div>
-              <div class="pwd-bar fill-green"></div>
-              <div class="pwd-bar fill-green"></div>
-              <div class="pwd-bar"></div>
-            </div>
-            <div style="font-size:9px; color:var(--green); margin-top:2px;">Fort</div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:16px;">
-          <label class="form-label">Zone de livraison (rayon)</label>
-          <div style="display:flex; gap:6px;">
-            <div class="form-field" style="background:#fff; border-color:var(--border2); flex:1; display:flex; align-items:center; justify-content:space-between;">
-              <span style="color:var(--text);">5 km de rayon</span><span>▾</span>
-            </div>
-            <div style="background:var(--green-light); border:0.5px solid #9FE1CB; border-radius:8px; padding:0 14px; display:flex; align-items:center; font-size:11px; font-weight:600; color:var(--green);">~Akpakpa</div>
-          </div>
-        </div>
-
-        <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:16px;">
-          <div style="width:14px; height:14px; border-radius:4px; background:var(--green); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.8 2L6.5 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
-          </div>
-          <div style="font-size:10px; color:var(--text2); line-height:1.5;">J'accepte les <a href="#" class="form-link">Conditions Générales</a> de SwiftDrop et j'autorise la vérification de mon établissement sous 24-48h.</div>
-        </div>
-
-        <button class="btn-auth btn-auth-green">Créer mon compte partenaire →</button>
-        <div style="text-align:center; font-size:10px; color:var(--text3);">Activation sous 24h après vérification par l'équipe SwiftDrop</div>
-
-        <div class="divider-auth" style="margin-top:16px;">Déjà partenaire ?</div>
-        <button class="btn-auth btn-auth-outline">Se connecter à mon espace →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════════
-     ÉCRAN 0b — Connexion seule (onglet Se connecter)
-═══════════════════════════════════════════════════ -->
-<div class="section-tag">2b. Connexion partenaire existant</div>
-<div class="browser-frame">
-  <div class="browser-bar">
-    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
-    <div class="browser-url">partenaire.swiftdrop.bj/auth → onglet "Se connecter"</div>
-  </div>
-  <div class="auth-layout">
-    <div class="auth-side-left">
-      <div>
-        <div class="auth-logo-wrap">
-          <div class="auth-logo-mark">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/><path d="M5.5 9L9 5.5L12.5 9L10.5 9L10.5 12.5L7.5 12.5L7.5 9Z" fill="white"/></svg>
-          </div>
-          <div class="auth-logo-text">SwiftDrop</div>
-        </div>
-        <div class="auth-hero-title" style="margin-top:40px;">Bon retour sur<br>votre espace</div>
-        <div class="auth-hero-sub" style="max-width:260px; margin-bottom:32px;">Vos commandes, vos livraisons, vos livreurs — tout ce dont vous avez besoin en un seul endroit.</div>
-      </div>
-      <!-- Live status widget -->
-      <div style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:14px; position:relative; z-index:1;">
-        <div style="font-size:9px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;">Activité SwiftDrop en ce moment</div>
-        <div style="display:flex; gap:14px;">
-          <div><div style="font-size:20px; font-weight:700; color:white;">34</div><div style="font-size:9px; color:rgba(255,255,255,0.5);">Livreurs actifs</div></div>
-          <div><div style="font-size:20px; font-weight:700; color:white;">18</div><div style="font-size:9px; color:rgba(255,255,255,0.5);">En transit</div></div>
-          <div><div style="font-size:20px; font-weight:700; color:white;">12</div><div style="font-size:9px; color:rgba(255,255,255,0.5);">Partenaires</div></div>
-        </div>
-      </div>
-      <div class="auth-features" style="margin-top:16px;">
-        <div class="auth-feature">
-          <div class="auth-feature-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 11.5l3-6 2 3.5 2-7 2.5 3.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" stroke-linecap="round"/></svg></div>
-          Tableau de bord personnalisé
-        </div>
-        <div class="auth-feature">
-          <div class="auth-feature-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1C4.3 1 2.5 2.8 2.5 5c0 3.5 4 7 4 7s4-3.5 4-7c0-2.2-1.8-4-4-4z" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" fill="none"/><circle cx="6.5" cy="5" r="1.5" fill="rgba(255,255,255,0.8)"/></svg></div>
-          Suivi GPS de toutes vos livraisons
-        </div>
-      </div>
-    </div>
-
-    <div class="auth-side-right">
-      <div style="max-width:320px; margin:0 auto; width:100%;">
-        <div style="margin-bottom:20px;">
-          <div style="font-size:20px; font-weight:700; color:var(--text); margin-bottom:4px;">Connexion</div>
-          <div style="font-size:11px; color:var(--text2);">Accédez à votre espace partenaire</div>
-        </div>
-
-        <div class="auth-tabs">
-          <div class="auth-tab active">Se connecter</div>
-          <div class="auth-tab">Créer un compte</div>
-        </div>
-
-        <!-- Partenaire identifier chip -->
-        <div style="display:flex; align-items:center; gap:10px; background:var(--green-light); border:0.5px solid #9FE1CB; border-radius:9px; padding:10px 12px; margin-bottom:18px;">
-          <div style="width:36px; height:36px; border-radius:9px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:white; flex-shrink:0;">LB</div>
-          <div style="flex:1;">
-            <div style="font-size:11px; font-weight:600; color:var(--green);">Le Bon Goût</div>
-            <div style="font-size:9px; color:var(--green-dark);">Restaurant · Fidjrossè · Partenaire actif</div>
-          </div>
-          <button style="font-size:9px; color:var(--text2); background:transparent; border:none; cursor:pointer; font-family:var(--font);">Changer ↗</button>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Adresse e-mail</label>
-          <input class="form-field form-field-mock-active" value="contact@lebongout.bj" type="text" readonly/>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Mot de passe</label>
-          <div style="position:relative;">
-            <input class="form-field" value="••••••••••" type="text" readonly style="padding-right:36px;"/>
-            <div style="position:absolute; right:10px; top:50%; transform:translateY(-50%);">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><ellipse cx="6.5" cy="6.5" rx="4.5" ry="3" stroke="var(--text3)" stroke-width="1.2"/><circle cx="6.5" cy="6.5" r="1.3" fill="var(--text3)"/></svg>
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-          <div style="display:flex; align-items:center; gap:6px;">
-            <div style="width:14px; height:14px; border-radius:4px; background:var(--green); display:flex; align-items:center; justify-content:center;">
-              <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.8 2L6.5 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
-            </div>
-            <span style="font-size:10px; color:var(--text2);">Rester connecté</span>
-          </div>
-          <a href="#" class="form-link">Mot de passe oublié ?</a>
-        </div>
-
-        <button class="btn-auth btn-auth-green">Accéder à mon espace →</button>
-
-        <div style="margin-top:20px; text-align:center; font-size:10px; color:var(--text3);">
-          Pas encore partenaire ? <a href="#" class="form-link">Rejoindre SwiftDrop</a>
-        </div>
-
-        <div style="margin-top:18px; background:var(--bg); border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:8px;">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L11.5 3.5v4C11.5 10.3 9.3 12.3 6.5 13c-2.8-.7-5-2.7-5-5.5v-4Z" stroke="var(--green)" stroke-width="1.2" fill="none"/><path d="M4.5 6.5l1.5 1.5 2.5-3" stroke="var(--green)" stroke-width="1.2" stroke-linecap="round"/></svg>
-          <div style="font-size:10px; color:var(--text2); line-height:1.4;">Votre espace est protégé par une authentification sécurisée SwiftDrop</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <!-- ═══════════════════════════════════════════════════
@@ -1319,6 +1115,639 @@ body { font-family: var(--font-sans); background: #f0faf6; padding: 32px; }
     </div>
   </div>
 </div>
+
+
+
+<!-- ═══════════════════════════════════════════════════
+     SECTION : AUTHENTIFICATION & PARAMÈTRES PARTENAIRE
+═══════════════════════════════════════════════════ -->
+<div style="height: 2px; background: linear-gradient(90deg, #0F6E56, #1D9E75); border-radius: 2px; margin: 20px 0 40px;"></div>
+<div class="section-header" style="font-size: 11px; font-weight: 600; color: #78716c; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 20px;">Authentification & Paramètres — Portail Partenaire</div>
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 2 — Connexion Partenaire (2 onglets)
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">2. Connexion / Inscription — Portail Partenaire</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">partenaire.swiftdrop.bj/auth</div>
+  </div>
+  <div class="auth-layout">
+
+    <!-- Left -->
+    <div class="auth-side-left">
+      <div>
+        <div class="auth-logo-wrap">
+          <div class="auth-logo-mark-w">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/>
+              <path d="M5.5 9L9 5.5L12.5 9L10.5 9L10.5 12.5L7.5 12.5L7.5 9Z" fill="white"/>
+            </svg>
+          </div>
+          <div class="auth-logo-text-w">SwiftDrop</div>
+        </div>
+        <div style="font-size:10px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:16px; position:relative; z-index:1;">Portail Partenaire</div>
+        <div class="auth-hero-title">Développez votre<br>activité avec nous</div>
+        <div class="auth-hero-sub" style="max-width:260px;">Restaurants, pharmacies, supermarchés — gérez vos livraisons, vérifiez vos livreurs et suivez vos commandes en temps réel.</div>
+      </div>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/><rect x="7" y="1" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/><rect x="1" y="7" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/><rect x="7" y="7" width="5" height="5" rx="1" fill="rgba(255,255,255,0.8)"/></svg>
+          </div>
+          Dashboard commandes en direct
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="2" y="2" width="9" height="9" rx="2" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><path d="M5 6.5h3M6.5 5v3" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/></svg>
+          </div>
+          Scanner QR & vérification livreur
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><path d="M6.5 3.5v3l2 1.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          Suivi GPS temps réel
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 9L4.5 4l2 3.5L8 5l2.5 4" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          Statistiques & revenus mensuels
+        </div>
+      </div>
+      <!-- Partner logos mockup -->
+      <div style="position:absolute; bottom:24px; right:20px; z-index:1; display:flex; flex-direction:column; gap:6px;">
+        <div style="font-size:9px; color:rgba(255,255,255,0.4); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:2px;">Ils nous font confiance</div>
+        <div style="display:flex; gap:6px;">
+          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">La Terrasse</div>
+          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">Pharmaco+</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">TopMarché</div>
+          <div style="background:rgba(255,255,255,0.12); border-radius:6px; padding:5px 9px; font-size:9px; color:rgba(255,255,255,0.8);">12+ autres</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right form -->
+    <div class="auth-side-right">
+      <div style="max-width:360px; margin:0 auto; width:100%;">
+        <div style="margin-bottom:20px;">
+          <div style="font-size:20px; font-weight:700; color:var(--text); margin-bottom:4px;">Portail Partenaire</div>
+          <div style="font-size:11px; color:var(--text2);">Gérez vos livraisons depuis Cotonou, Bénin</div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="auth-tabs">
+          <div class="auth-tab">Se connecter</div>
+          <div class="auth-tab active">Créer un compte</div>
+        </div>
+
+        <!-- INSCRIPTION FORM (active tab) -->
+        <div class="form-row-a">
+          <div>
+            <label class="form-label-a">Nom de l'établissement</label>
+            <input class="form-field-a form-field-a-active" value="Le Bon Goût" type="text" readonly/>
+          </div>
+          <div>
+            <label class="form-label-a">Type d'établissement</label>
+            <div class="form-field-a" style="color:var(--green); background:#fff; border-color:var(--green); display:flex; align-items:center; justify-content:space-between;">
+              <span>Restaurant</span><span>▾</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group-a">
+          <label class="form-label-a">Adresse complète</label>
+          <input class="form-field-a" value="Fidjrossè, Cotonou, Bénin" type="text" readonly/>
+        </div>
+
+        <div class="form-row-a">
+          <div>
+            <label class="form-label-a">Téléphone (principal)</label>
+            <input class="form-field-a" value="+229 97 23 45 67" type="text" readonly/>
+          </div>
+          <div>
+            <label class="form-label-a">Téléphone (Mobile Money)</label>
+            <input class="form-field-a" value="+229 97 23 45 67" type="text" readonly/>
+          </div>
+        </div>
+
+        <div class="form-row-a">
+          <div>
+            <label class="form-label-a">E-mail de connexion</label>
+            <input class="form-field-a" value="contact@lebongout.bj" type="text" readonly/>
+          </div>
+          <div>
+            <label class="form-label-a">Mot de passe</label>
+            <div style="position:relative;">
+              <input class="form-field-a" value="••••••••" type="text" readonly style="padding-right:36px;"/>
+              <div style="position:absolute; right:10px; top:50%; transform:translateY(-50%);">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><ellipse cx="6.5" cy="6.5" rx="4.5" ry="3" stroke="var(--text3)" stroke-width="1.2"/><circle cx="6.5" cy="6.5" r="1.3" fill="var(--text3)"/></svg>
+              </div>
+            </div>
+            <!-- Password strength -->
+            <div class="pwd-strength" style="margin-top:4px;">
+              <div class="pwd-bar fill-green"></div>
+              <div class="pwd-bar fill-green"></div>
+              <div class="pwd-bar fill-green"></div>
+              <div class="pwd-bar"></div>
+            </div>
+            <div style="font-size:9px; color:var(--green); margin-top:2px;">Fort</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <label class="form-label-a">Zone de livraison (rayon)</label>
+          <div style="display:flex; gap:6px;">
+            <div class="form-field-a" style="background:#fff; border-color:var(--border2); flex:1; display:flex; align-items:center; justify-content:space-between;">
+              <span style="color:var(--text);">5 km de rayon</span><span>▾</span>
+            </div>
+            <div style="background:var(--green-light); border:0.5px solid #9FE1CB; border-radius:8px; padding:0 14px; display:flex; align-items:center; font-size:11px; font-weight:600; color:var(--green);">~Akpakpa</div>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:16px;">
+          <div style="width:14px; height:14px; border-radius:4px; background:var(--green); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;">
+            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.8 2L6.5 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div style="font-size:10px; color:var(--text2); line-height:1.5;">J'accepte les <a href="#" class="form-link">Conditions Générales</a> de SwiftDrop et j'autorise la vérification de mon établissement sous 24-48h.</div>
+        </div>
+
+        <button class="btn-auth btn-auth-green">Créer mon compte partenaire →</button>
+        <div style="text-align:center; font-size:10px; color:var(--text3);">Activation sous 24h après vérification par l'équipe SwiftDrop</div>
+
+        <div class="divider-auth" style="margin-top:16px;">Déjà partenaire ?</div>
+        <button class="btn-auth btn-auth-outline">Se connecter à mon espace →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 2b — Connexion seule (onglet Se connecter)
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">2b. Connexion partenaire existant</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">partenaire.swiftdrop.bj/auth → onglet "Se connecter"</div>
+  </div>
+  <div class="auth-layout">
+    <div class="auth-side-left">
+      <div>
+        <div class="auth-logo-wrap">
+          <div class="auth-logo-mark-w">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/><path d="M5.5 9L9 5.5L12.5 9L10.5 9L10.5 12.5L7.5 12.5L7.5 9Z" fill="white"/></svg>
+          </div>
+          <div class="auth-logo-text-w">SwiftDrop</div>
+        </div>
+        <div class="auth-hero-title" style="margin-top:40px;">Bon retour sur<br>votre espace</div>
+        <div class="auth-hero-sub" style="max-width:260px; margin-bottom:32px;">Vos commandes, vos livraisons, vos livreurs — tout ce dont vous avez besoin en un seul endroit.</div>
+      </div>
+      <!-- Live status widget -->
+      <div style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:14px; position:relative; z-index:1;">
+        <div style="font-size:9px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;">Activité SwiftDrop en ce moment</div>
+        <div style="display:flex; gap:14px;">
+          <div><div style="font-size:20px; font-weight:700; color:white;">34</div><div style="font-size:9px; color:rgba(255,255,255,0.5);">Livreurs actifs</div></div>
+          <div><div style="font-size:20px; font-weight:700; color:white;">18</div><div style="font-size:9px; color:rgba(255,255,255,0.5);">En transit</div></div>
+          <div><div style="font-size:20px; font-weight:700; color:white;">12</div><div style="font-size:9px; color:rgba(255,255,255,0.5);">Partenaires</div></div>
+        </div>
+      </div>
+      <div class="auth-features" style="margin-top:16px;">
+        <div class="auth-feature">
+          <div class="auth-feature-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 11.5l3-6 2 3.5 2-7 2.5 3.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+          Tableau de bord personnalisé
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1C4.3 1 2.5 2.8 2.5 5c0 3.5 4 7 4 7s4-3.5 4-7c0-2.2-1.8-4-4-4z" stroke="rgba(255,255,255,0.8)" stroke-width="1.2" fill="none"/><circle cx="6.5" cy="5" r="1.5" fill="rgba(255,255,255,0.8)"/></svg></div>
+          Suivi GPS de toutes vos livraisons
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-side-right">
+      <div style="max-width:320px; margin:0 auto; width:100%;">
+        <div style="margin-bottom:20px;">
+          <div style="font-size:20px; font-weight:700; color:var(--text); margin-bottom:4px;">Connexion</div>
+          <div style="font-size:11px; color:var(--text2);">Accédez à votre espace partenaire</div>
+        </div>
+
+        <div class="auth-tabs">
+          <div class="auth-tab active">Se connecter</div>
+          <div class="auth-tab">Créer un compte</div>
+        </div>
+
+        <!-- Partenaire identifier chip -->
+        <div style="display:flex; align-items:center; gap:10px; background:var(--green-light); border:0.5px solid #9FE1CB; border-radius:9px; padding:10px 12px; margin-bottom:18px;">
+          <div style="width:36px; height:36px; border-radius:9px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:white; flex-shrink:0;">LB</div>
+          <div style="flex:1;">
+            <div style="font-size:11px; font-weight:600; color:var(--green);">Le Bon Goût</div>
+            <div style="font-size:9px; color:var(--green-dark);">Restaurant · Fidjrossè · Partenaire actif</div>
+          </div>
+          <button style="font-size:9px; color:var(--text2); background:transparent; border:none; cursor:pointer; font-family:var(--font);">Changer ↗</button>
+        </div>
+
+        <div class="form-group-a">
+          <label class="form-label-a">Adresse e-mail</label>
+          <input class="form-field-a form-field-a-active" value="contact@lebongout.bj" type="text" readonly/>
+        </div>
+
+        <div class="form-group-a">
+          <label class="form-label-a">Mot de passe</label>
+          <div style="position:relative;">
+            <input class="form-field-a" value="••••••••••" type="text" readonly style="padding-right:36px;"/>
+            <div style="position:absolute; right:10px; top:50%; transform:translateY(-50%);">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><ellipse cx="6.5" cy="6.5" rx="4.5" ry="3" stroke="var(--text3)" stroke-width="1.2"/><circle cx="6.5" cy="6.5" r="1.3" fill="var(--text3)"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div style="width:14px; height:14px; border-radius:4px; background:var(--green); display:flex; align-items:center; justify-content:center;">
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.8 2L6.5 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <span style="font-size:10px; color:var(--text2);">Rester connecté</span>
+          </div>
+          <a href="#" class="form-link">Mot de passe oublié ?</a>
+        </div>
+
+        <button class="btn-auth btn-auth-green">Accéder à mon espace →</button>
+
+        <div style="margin-top:20px; text-align:center; font-size:10px; color:var(--text3);">
+          Pas encore partenaire ? <a href="#" class="form-link">Rejoindre SwiftDrop</a>
+        </div>
+
+        <div style="margin-top:18px; background:var(--bg); border-radius:8px; padding:10px 12px; display:flex; align-items:center; gap:8px;">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L11.5 3.5v4C11.5 10.3 9.3 12.3 6.5 13c-2.8-.7-5-2.7-5-5.5v-4Z" stroke="var(--green)" stroke-width="1.2" fill="none"/><path d="M4.5 6.5l1.5 1.5 2.5-3" stroke="var(--green)" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <div style="font-size:10px; color:var(--text2); line-height:1.4;">Votre espace est protégé par une authentification sécurisée SwiftDrop</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 3 — Paramètres Portail Partenaire
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">3. Paramètres — Portail Partenaire</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">partenaire.swiftdrop.bj/parametres</div>
+    <div style="font-size:10px; color:var(--text2);">Le Bon Goût · Fidjrossè</div>
+  </div>
+  <div class="settings-layout-p">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7L7 4.5L9.5 7L8 7L8 9.5L6 9.5L6 7Z" fill="white"/></svg>
+        </div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Partenaire</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section-p">Principal</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+          Tableau de bord
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 7h7M2 11h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Commandes<span class="nav-badge-p" style="background:#E24B4A;">2</span>
+        </div>
+        <div class="nav-section-p">Livraison</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 8h6M4 6h3" stroke="currentColor" stroke-width="1.2"/></svg>
+          Lancer livraison
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M5 7h4M7 5v4" stroke="currentColor" stroke-width="1.2"/></svg>
+          Scanner livreur
+        </div>
+        <div class="nav-section-p">Gestion</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+          Historique
+        </div>
+        <div class="nav-link active">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2" fill="#0F6E56"/><circle cx="7" cy="7" r="5.5" stroke="#0F6E56" stroke-width="1.2"/><path d="M7 1.5v1M7 11.5v1M1.5 7h1M11.5 7h1" stroke="#0F6E56" stroke-width="1.2"/></svg>
+          Paramètres
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="partner-chip">
+          <div class="partner-avatar">LB</div>
+          <div>
+            <div style="font-size:10px; font-weight:500; color:var(--text);">Le Bon Goût</div>
+            <div style="font-size:9px; color:var(--text2);">Restaurant · Ouvert</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:9px; color:var(--text2);">Livraisons actives</span>
+          <div class="toggle"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings main content -->
+    <div class="settings-main-p">
+      <div class="settings-header-p">
+        <div class="settings-title-p">Paramètres</div>
+        <div class="settings-sub-p">Configurez votre établissement, vos préférences de livraison et vos notifications</div>
+      </div>
+
+      <div class="settings-grid-p">
+
+        <!-- Left nav -->
+        <div>
+          <div class="settings-nav-p">
+            <div class="settings-nav-item-p active">
+              <div class="settings-nav-icon-p" style="background:var(--green-light);">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="var(--green)" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="var(--green)" stroke-width="1.2"/></svg>
+              </div>
+              Profil de l'établissement
+            </div>
+            <div class="settings-nav-item-p">
+              <div class="settings-nav-icon-p" style="background:#e6f1fb;">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 4v6L7 13 1 10V4Z" stroke="#185FA5" stroke-width="1.2"/></svg>
+              </div>
+              Zone & horaires de livraison
+            </div>
+            <div class="settings-nav-item-p">
+              <div class="settings-nav-icon-p" style="background:var(--amber-light);">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3c0-0.6.4-1 1-1h1.5c.4 0 .7.2.9.6l.8 1.8c.2.4.1.9-.3 1.1l-.9.5c.6 1.4 1.7 2.4 3 3l.5-.9c.3-.3.7-.5 1.1-.3l1.8.8c.3.2.6.5.6.9V11c0 .6-.4 1-1 1C5.4 12 2 8.6 2 3Z" stroke="#854F0B" stroke-width="1.2"/></svg>
+              </div>
+              Notifications & alertes
+            </div>
+            <div class="settings-nav-item-p">
+              <div class="settings-nav-icon-p" style="background:var(--purple-light);">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="var(--purple)" stroke-width="1.2"/><path d="M5 7h4M7 5v4" stroke="var(--purple)" stroke-width="1.2"/></svg>
+              </div>
+              Intégrations & API
+            </div>
+            <div class="settings-nav-item-p">
+              <div class="settings-nav-icon-p" style="background:var(--red-light);">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 4L13 10L7 13L1 10L1 4Z" stroke="var(--red)" stroke-width="1.2"/><path d="M7 5v3M7 9.5v.5" stroke="var(--red)" stroke-width="1.2"/></svg>
+              </div>
+              Sécurité & compte
+            </div>
+          </div>
+
+          <!-- Quick stats -->
+          <div style="margin-top:16px; background:#fff; border:0.5px solid var(--border); border-radius:10px; padding:12px;">
+            <div style="font-size:10px; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px;">Ce mois — Avril 2026</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+              <div class="mini-stat-p"><div class="mini-stat-val-p" style="color:var(--green);">214</div><div class="mini-stat-lbl-p">Livraisons</div></div>
+              <div class="mini-stat-p"><div class="mini-stat-val-p">4,7 ★</div><div class="mini-stat-lbl-p">Note moy.</div></div>
+              <div class="mini-stat-p"><div class="mini-stat-val-p">98 %</div><div class="mini-stat-lbl-p">Taux succès</div></div>
+              <div class="mini-stat-p"><div class="mini-stat-val-p" style="color:var(--green);">900F</div><div class="mini-stat-lbl-p">Prix moy.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right panel — Profil (active section) -->
+        <div>
+
+          <!-- Profil établissement -->
+          <div class="settings-card-p">
+            <div class="settings-card-title-p">
+              <span>Profil de l'établissement</span>
+              <button class="btn btn-primary btn-sm">Sauvegarder</button>
+            </div>
+
+            <!-- Avatar & cover -->
+            <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px; padding:12px; background:var(--bg); border-radius:8px;">
+              <div style="width:52px; height:52px; border-radius:12px; background:var(--green); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:white; flex-shrink:0;">LB</div>
+              <div>
+                <div style="font-size:12px; font-weight:600; color:var(--text);">Le Bon Goût</div>
+                <div style="font-size:10px; color:var(--text2); margin-bottom:6px;">Restaurant · ID : #PART-0042 · Actif depuis mars 2026</div>
+                <button class="btn btn-sm">Modifier le logo</button>
+              </div>
+              <div style="margin-left:auto;">
+                <span class="badge badge-green">Partenaire actif</span>
+              </div>
+            </div>
+
+            <div class="settings-field-row-p">
+              <div>
+                <label class="s-label-p">Nom de l'établissement</label>
+                <input class="s-input-p s-input-p-active" value="Le Bon Goût" type="text" readonly/>
+              </div>
+              <div>
+                <label class="s-label-p">Type d'établissement</label>
+                <div class="s-input-p" style="background:#fff; border-color:var(--border2); display:flex; align-items:center; justify-content:space-between; padding:7px 10px; font-size:11px;">
+                  <span style="color:var(--text);">Restaurant</span><span style="color:var(--text2);">▾</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-field-p">
+              <label class="s-label-p">Adresse complète</label>
+              <input class="s-input-p" value="Fidjrossè, Cotonou, Bénin" type="text" readonly/>
+            </div>
+
+            <div class="settings-field-row-p">
+              <div>
+                <label class="s-label-p">Téléphone principal</label>
+                <input class="s-input-p" value="+229 97 23 45 67" type="text" readonly/>
+              </div>
+              <div>
+                <label class="s-label-p">E-mail de contact</label>
+                <input class="s-input-p" value="contact@lebongout.bj" type="text" readonly/>
+              </div>
+            </div>
+
+            <div class="settings-field-p">
+              <label class="s-label-p">Description (affichée aux livreurs)</label>
+              <div class="s-input-p" style="height:54px; background:#fafaf9; padding:7px 10px; font-size:11px; color:var(--text2);">Restaurant de cuisine locale béninoise. Livraison rapide, emballages sécurisés.</div>
+            </div>
+          </div>
+
+          <!-- Horaires d'ouverture -->
+          <div class="settings-card-p">
+            <div class="settings-card-title-p">
+              <span>Horaires d'ouverture & livraison</span>
+              <span class="badge badge-green">Ouvert maintenant</span>
+            </div>
+            <div style="display:grid; grid-template-columns:80px 1fr 1fr 60px; gap:8px; align-items:center; margin-bottom:4px;">
+              <div style="font-size:9px; color:var(--text2); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Jour</div>
+              <div style="font-size:9px; color:var(--text2); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Ouverture</div>
+              <div style="font-size:9px; color:var(--text2); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Fermeture</div>
+              <div style="font-size:9px; color:var(--text2); font-weight:600; text-transform:uppercase; letter-spacing:0.04em;">Actif</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <!-- Mon - Ven -->
+              <div style="display:grid; grid-template-columns:80px 1fr 1fr 60px; gap:8px; align-items:center;">
+                <div style="font-size:10px; color:var(--text); font-weight:500;">Lun – Ven</div>
+                <div class="s-input-p s-input-p-active" style="font-size:11px; color:var(--text); padding:5px 8px;">11:00</div>
+                <div class="s-input-p" style="font-size:11px; padding:5px 8px;">22:00</div>
+                <div style="display:flex; justify-content:center;"><div class="toggle"></div></div>
+              </div>
+              <div style="display:grid; grid-template-columns:80px 1fr 1fr 60px; gap:8px; align-items:center;">
+                <div style="font-size:10px; color:var(--text); font-weight:500;">Samedi</div>
+                <div class="s-input-p" style="font-size:11px; padding:5px 8px;">10:00</div>
+                <div class="s-input-p" style="font-size:11px; padding:5px 8px;">23:00</div>
+                <div style="display:flex; justify-content:center;"><div class="toggle"></div></div>
+              </div>
+              <div style="display:grid; grid-template-columns:80px 1fr 1fr 60px; gap:8px; align-items:center;">
+                <div style="font-size:10px; color:var(--text2);">Dimanche</div>
+                <div class="s-input-p" style="font-size:11px; padding:5px 8px; color:var(--text3);">11:00</div>
+                <div class="s-input-p" style="font-size:11px; padding:5px 8px; color:var(--text3);">21:00</div>
+                <div style="display:flex; justify-content:center;"><div class="toggle toggle-off"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zone de livraison -->
+          <div class="settings-card-p">
+            <div class="settings-card-title-p">
+              <span>Zone & rayon de livraison</span>
+              <button class="btn btn-sm">Modifier sur carte</button>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+              <div>
+                <label class="s-label-p">Rayon maximum</label>
+                <div style="display:flex; gap:6px; align-items:center;">
+                  <div class="s-input-p s-input-p-active" style="font-size:14px; font-weight:700; color:var(--green); padding:6px 10px;">5</div>
+                  <span style="font-size:11px; color:var(--text2);">km</span>
+                </div>
+                <input type="range" min="1" max="15" value="5" style="width:100%; margin-top:6px; accent-color:var(--green);"/>
+                <div style="display:flex; justify-content:space-between; font-size:9px; color:var(--text3);"><span>1 km</span><span>15 km</span></div>
+              </div>
+              <div>
+                <label class="s-label-p">Quartiers couverts</label>
+                <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:2px;">
+                  <div class="zone-badge-p">Fidjrossè <span class="zone-badge-close">×</span></div>
+                  <div class="zone-badge-p">Akpakpa <span class="zone-badge-close">×</span></div>
+                  <div class="zone-badge-p">Cadjèhoun <span class="zone-badge-close">×</span></div>
+                  <div class="zone-badge-p">Haie Vive <span class="zone-badge-close">×</span></div>
+                  <div style="background:var(--bg); border:0.5px dashed var(--border2); border-radius:20px; padding:4px 10px; font-size:10px; color:var(--text2); cursor:pointer;">+ Ajouter</div>
+                </div>
+              </div>
+            </div>
+            <div style="background:var(--bg); border-radius:8px; padding:9px 11px; font-size:10px; color:var(--text2); display:flex; align-items:center; gap:6px;">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#854F0B" stroke-width="1.2"/><path d="M6 4v3M6 8v.5" stroke="#854F0B" stroke-width="1.2"/></svg>
+              <span style="color:#854F0B;">Augmenter le rayon au-delà de 8 km peut affecter le délai de livraison et la disponibilité des livreurs.</span>
+            </div>
+          </div>
+
+          <!-- Notifications -->
+          <div class="settings-card-p">
+            <div class="settings-card-title-p">Notifications & alertes</div>
+            <div class="notif-row-p">
+              <div>
+                <div class="notif-label-p">Nouvelle commande reçue</div>
+                <div class="notif-sub-p">Son d'alerte + notification push</div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:9px; color:var(--text2);">Son</span><div class="toggle"></div>
+                <span style="font-size:9px; color:var(--text2);">Push</span><div class="toggle"></div>
+              </div>
+            </div>
+            <div class="notif-row-p">
+              <div>
+                <div class="notif-label-p">Livreur assigné à une commande</div>
+                <div class="notif-sub-p">Confirmation d'assignation</div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:9px; color:var(--text2);">Son</span><div class="toggle toggle-off"></div>
+                <span style="font-size:9px; color:var(--text2);">Push</span><div class="toggle"></div>
+              </div>
+            </div>
+            <div class="notif-row-p">
+              <div>
+                <div class="notif-label-p">Retard de livraison détecté</div>
+                <div class="notif-sub-p">Alerte si ETA dépassée de plus de 10 min</div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:9px; color:var(--text2);">Son</span><div class="toggle"></div>
+                <span style="font-size:9px; color:var(--text2);">Push</span><div class="toggle"></div>
+              </div>
+            </div>
+            <div class="notif-row-p">
+              <div>
+                <div class="notif-label-p">Rapport quotidien par e-mail</div>
+                <div class="notif-sub-p">Résumé des livraisons chaque soir à 22h</div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:9px; color:var(--text2);">E-mail</span><div class="toggle"></div>
+              </div>
+            </div>
+            <div class="notif-row-p" style="border-bottom:none;">
+              <div>
+                <div class="notif-label-p">Offres & promotions SwiftDrop</div>
+                <div class="notif-sub-p">Informations commerciales</div>
+              </div>
+              <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-size:9px; color:var(--text2);">Push</span><div class="toggle toggle-off"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sécurité & Compte -->
+          <div class="settings-card-p">
+            <div class="settings-card-title-p">Sécurité & accès</div>
+            <div style="margin-bottom:12px;">
+              <label class="s-label-p">Mot de passe actuel</label>
+              <div class="pwd-display-p">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="3" y="5.5" width="7" height="6" rx="1" stroke="var(--text3)" stroke-width="1.2"/><path d="M5 5.5V4a1.5 1.5 0 0 1 3 0v1.5" stroke="var(--text3)" stroke-width="1.2"/></svg>
+                <span>••••••••••</span>
+                <button class="btn btn-sm" style="margin-left:auto;">Changer</button>
+              </div>
+            </div>
+            <div class="notif-row-p">
+              <div>
+                <div class="notif-label-p">Authentification à 2 facteurs (2FA)</div>
+                <div class="notif-sub-p">Code SMS à chaque connexion</div>
+              </div>
+              <div class="toggle"></div>
+            </div>
+            <div class="notif-row-p" style="border-bottom:none;">
+              <div>
+                <div class="notif-label-p">Sessions actives</div>
+                <div class="notif-sub-p">1 appareil connecté · Chrome · Cotonou</div>
+              </div>
+              <button class="btn btn-danger btn-sm">Déconnecter tout</button>
+            </div>
+          </div>
+
+          <!-- Danger zone -->
+          <div class="danger-zone-p">
+            <div style="font-size:11px; font-weight:600; color:var(--red); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L12 4L12 9L6.5 12L1 9L1 4Z" stroke="var(--red)" stroke-width="1.2"/><path d="M6.5 5v3" stroke="var(--red)" stroke-width="1.2"/></svg>
+              Zone critique
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+              <div>
+                <div style="font-size:10px; font-weight:500; color:var(--text);">Suspendre temporairement les livraisons</div>
+                <div style="font-size:9px; color:var(--text2); margin-top:1px;">Aucune nouvelle commande ne sera acceptée</div>
+              </div>
+              <button class="btn btn-danger btn-sm" style="font-size:9px;">Suspendre</button>
+            </div>
+            <div style="height:0.5px; background:#F7C1C1; margin:8px 0;"></div>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div>
+                <div style="font-size:10px; font-weight:500; color:var(--red);">Demander la fermeture du compte</div>
+                <div style="font-size:9px; color:var(--text2); margin-top:1px;">Irréversible · Traitement sous 7 jours par l'admin</div>
+              </div>
+              <button class="btn btn-sm" style="background:var(--red); border-color:var(--red); color:white; font-size:9px;">Demander</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 </body>
 </html>
