@@ -153,6 +153,136 @@ body { font-family: var(--font-sans); background: #f0faf6; padding: 32px; }
 <div class="page-title">Dashboard Administrateur — SwiftDrop</div>
 <div class="page-sub">Interface de supervision complète · Web</div>
 
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 0— Connexion Administrateur
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">1. Connexion — Espace Administrateur</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">admin.swiftdrop.bj/login</div>
+  </div>
+  <div class="auth-layout">
+
+    <!-- Left decorative panel -->
+    <div class="auth-side-left auth-admin-left">
+      <div>
+        <div class="auth-logo-wrap">
+          <div class="auth-logo-mark">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="7" stroke="white" stroke-width="1.5"/>
+              <path d="M5.5 9L9 5.5L12.5 9L10.5 9L10.5 12.5L7.5 12.5L7.5 9Z" fill="white"/>
+            </svg>
+          </div>
+          <div class="auth-logo-text">SwiftDrop</div>
+        </div>
+        <div style="font-size:10px; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:16px; position:relative; z-index:1;">Administration</div>
+        <div class="auth-hero-title">Espace de supervision<br>et de contrôle</div>
+        <div class="auth-hero-sub" style="max-width:260px;">Accès réservé aux administrateurs SwiftDrop. Gérez les livreurs, les partenaires et supervisez toutes les opérations en temps réel.</div>
+      </div>
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><circle cx="6.5" cy="6.5" r="2" fill="rgba(255,255,255,0.8)"/></svg>
+          </div>
+          Supervision temps réel · Cotonou
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="4.5" r="2.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><path d="M1.5 12c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/></svg>
+          </div>
+          Validation KYC livreurs
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><rect x="1" y="3" width="11" height="7" rx="1.5" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><path d="M1 5.5h11" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/></svg>
+          </div>
+          Commissions & Litiges
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M6.5 1L12 4v5L6.5 12 1 9V4Z" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/><path d="M6.5 5v3" stroke="rgba(255,255,255,0.8)" stroke-width="1.2"/></svg>
+          </div>
+          Gestion des alertes critiques
+        </div>
+      </div>
+      <!-- Decorative badge -->
+      <div style="position:absolute; bottom:30px; right:30px; z-index:1;">
+        <div style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.15); border-radius:10px; padding:10px 14px; text-align:center;">
+          <div style="font-size:18px; font-weight:700; color:white;">127</div>
+          <div style="font-size:9px; color:rgba(255,255,255,0.6);">Livraisons aujourd'hui</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right form panel -->
+    <div class="auth-side-right">
+      <div style="max-width:340px; margin:0 auto; width:100%;">
+        <div style="margin-bottom:28px;">
+          <div style="font-size:20px; font-weight:700; color:var(--text); margin-bottom:4px;">Connexion Admin</div>
+          <div style="font-size:11px; color:var(--text2);">Accès restreint · Authentification à 2 facteurs requise</div>
+        </div>
+
+        <!-- Security notice -->
+        <div style="background:#f3e8ff; border:0.5px solid #d8b4fe; border-radius:8px; padding:9px 11px; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L12.5 3.5v4.5C12.5 10.7 10 13 7 14c-3-1-5.5-3.3-5.5-6V3.5Z" stroke="#7c3aed" stroke-width="1.2" fill="none"/><path d="M7 5v3M7 9.5v.5" stroke="#7c3aed" stroke-width="1.2"/></svg>
+          <div style="font-size:10px; color:#5b21b6; line-height:1.4;">Connexion sécurisée · Session chiffrée · Logs d'accès activés</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Adresse e-mail</label>
+          <input class="form-field form-field-mock-active" style="border-color:var(--purple);" value="admin@swiftdrop.bj" readonly type="text"/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <div style="position:relative;">
+            <input class="form-field" value="••••••••••" type="text" readonly style="padding-right:36px;"/>
+            <div style="position:absolute; right:10px; top:50%; transform:translateY(-50%); cursor:pointer;">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><ellipse cx="7" cy="7" rx="5" ry="3.5" stroke="var(--text3)" stroke-width="1.2"/><circle cx="7" cy="7" r="1.5" fill="var(--text3)"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <div style="width:14px; height:14px; border-radius:4px; background:var(--purple); display:flex; align-items:center; justify-content:center;">
+              <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l1.8 2L6.5 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </div>
+            <span style="font-size:10px; color:var(--text2);">Garder la session active</span>
+          </div>
+          <a href="#" class="form-link form-link-purple">Mot de passe oublié ?</a>
+        </div>
+
+        <button class="btn-auth btn-auth-purple">Se connecter →</button>
+
+        <div class="divider-auth">Authentification à 2 facteurs</div>
+
+        <!-- 2FA step (shown after password) -->
+        <div style="background:var(--bg); border-radius:9px; padding:14px; border:0.5px solid var(--border);">
+          <div style="font-size:11px; font-weight:600; color:var(--text); margin-bottom:4px;">Code de vérification (OTP)</div>
+          <div style="font-size:10px; color:var(--text2); margin-bottom:10px;">Code envoyé au +229 97 ··· ·· 01</div>
+          <div class="otp-row">
+            <div class="otp-digit filled">4</div>
+            <div class="otp-digit filled">8</div>
+            <div class="otp-digit filled">3</div>
+            <div class="otp-digit">_</div>
+            <div class="otp-digit">_</div>
+            <div class="otp-digit">_</div>
+          </div>
+          <div style="font-size:10px; color:var(--text3); margin-top:6px;">Expire dans <strong style="color:var(--text2);">4:32</strong> · <a href="#" class="form-link form-link-purple">Renvoyer</a></div>
+        </div>
+
+        <div style="margin-top:20px; text-align:center;">
+          <div style="font-size:10px; color:var(--text3);">Problème d'accès ? <a href="#" class="form-link form-link-purple">Contacter le support technique</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
 <!-- ===== ÉCRAN 1 : Supervision en temps réel ===== -->
 <div class="section-tag">1. Supervision en temps réel</div>
 <div class="browser-frame">
