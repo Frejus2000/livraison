@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftDrop — Dashboard Admin</title>
+<style>
+:root {
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f5f5f4;
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #78716c;
+  --color-border-secondary: #d6d3d1;
+  --color-border-tertiary: #e7e5e4;
+  --font-sans: 'Segoe UI', system-ui, sans-serif;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: #f0faf6; padding: 32px; }
+
+.page-title { font-size: 15px; font-weight: 600; color: #1c1917; margin-bottom: 6px; }
+.page-sub { font-size: 12px; color: #78716c; margin-bottom: 28px; }
+.section-tag { display: inline-block; font-size: 12px; font-weight: 500; color: #0F6E56; margin-bottom: 12px; border-bottom: 2px solid #0F6E56; padding-bottom: 3px; }
+
+.browser-frame { background: #fff; border: 0.5px solid #d6d3d1; border-radius: 12px; overflow: hidden; margin-bottom: 40px; }
+.browser-bar { background: #f5f5f4; border-bottom: 0.5px solid #e7e5e4; padding: 8px 14px; display: flex; align-items: center; gap: 10px; }
+.browser-dots { display: flex; gap: 4px; }
+.browser-dot { width: 8px; height: 8px; border-radius: 50%; background: #d6d3d1; }
+.browser-url { flex: 1; background: #fff; border: 0.5px solid #e7e5e4; border-radius: 6px; padding: 3px 10px; font-size: 11px; color: #78716c; }
+
+.layout { display: flex; min-height: 500px; }
+
+/* Sidebar */
+.sidebar { width: 180px; border-right: 0.5px solid #e7e5e4; padding: 16px 0; flex-shrink: 0; display: flex; flex-direction: column; background: #fff; }
+.sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 0 14px 16px; border-bottom: 0.5px solid #e7e5e4; margin-bottom: 12px; }
+.logo-mark { width: 26px; height: 26px; background: #0F6E56; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-size: 13px; font-weight: 600; color: #1c1917; }
+.logo-sub { font-size: 9px; color: #78716c; }
+.nav-group { padding: 0 8px; flex: 1; }
+.nav-section { font-size: 9px; font-weight: 600; color: #a8a29e; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 8px 4px; }
+.nav-link { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 7px; font-size: 11px; color: #78716c; margin-bottom: 1px; cursor: pointer; }
+.nav-link.active { background: #e1f5ee; color: #0F6E56; font-weight: 500; }
+.nav-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: #0F6E56; color: white; font-size: 9px; border-radius: 10px; padding: 1px 6px; font-weight: 600; }
+.nav-badge-red { background: #E24B4A; }
+.sidebar-bottom { padding: 12px 14px 0; border-top: 0.5px solid #e7e5e4; margin-top: 12px; }
+.admin-chip { display: flex; align-items: center; gap: 8px; }
+.admin-avatar { width: 26px; height: 26px; border-radius: 50%; background: #0F6E56; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: white; flex-shrink: 0; }
+
+/* Main content */
+.main { flex: 1; padding: 20px; background: #f9fafb; overflow: hidden; }
+.content-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.content-title { font-size: 14px; font-weight: 600; color: #1c1917; }
+
+/* Stat cards */
+.stat-grid { display: grid; gap: 10px; margin-bottom: 16px; }
+.stat-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.stat-grid-5 { grid-template-columns: repeat(5, 1fr); }
+.stat-card { background: #fff; border: 0.5px solid #e7e5e4; border-radius: 10px; padding: 12px 14px; }
+.stat-val { font-size: 22px; font-weight: 600; color: #1c1917; }
+.stat-lbl { font-size: 10px; color: #78716c; margin-top: 2px; }
+.stat-green { color: #0F6E56; }
+.stat-amber { color: #854F0B; }
+.stat-red { color: #A32D2D; }
+.stat-blue { color: #185FA5; }
+.stat-delta { font-size: 10px; margin-top: 4px; display: flex; align-items: center; gap: 3px; }
+.delta-up { color: #0F6E56; }
+.delta-dn { color: #E24B4A; }
+
+/* Badges */
+.badge { display: inline-flex; align-items: center; border-radius: 20px; font-size: 10px; font-weight: 500; padding: 2px 8px; }
+.badge-green { background: #e1f5ee; color: #0F6E56; }
+.badge-amber { background: #faeeda; color: #854F0B; }
+.badge-blue { background: #e6f1fb; color: #185FA5; }
+.badge-red { background: #fcebeb; color: #A32D2D; }
+.badge-gray { background: #f5f5f4; color: #78716c; }
+.badge-purple { background: #f3e8ff; color: #7c3aed; }
+
+/* Tables */
+.table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.table th { text-align: left; font-size: 10px; font-weight: 500; color: #78716c; padding: 0 8px 8px; border-bottom: 0.5px solid #e7e5e4; }
+.table td { padding: 9px 8px; border-bottom: 0.5px solid #e7e5e4; color: #1c1917; vertical-align: middle; }
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #f9fafb; }
+
+/* Cards */
+.card { background: #fff; border: 0.5px solid #e7e5e4; border-radius: 10px; padding: 12px 14px; }
+.card-title { font-size: 11px; font-weight: 600; color: #1c1917; margin-bottom: 8px; }
+.sep { height: 0.5px; background: #e7e5e4; margin: 8px 0; }
+
+/* Buttons */
+.btn { border: 0.5px solid #d6d3d1; border-radius: 7px; background: #fff; color: #1c1917; font-size: 10px; padding: 4px 10px; cursor: pointer; font-family: var(--font-sans); }
+.btn-primary { background: #0F6E56; border-color: #0F6E56; color: white; }
+.btn-danger { background: #fcebeb; border-color: #F7C1C1; color: #A32D2D; }
+.btn-amber { background: #faeeda; border-color: #f5d19a; color: #854F0B; }
+.btn-sm { padding: 3px 8px; font-size: 9px; }
+
+/* Map mock */
+.map-mock { background: linear-gradient(135deg, #c8e6c9, #a5d6a7); border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.map-mock::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 12px, rgba(255,255,255,0.2) 12px, rgba(255,255,255,0.2) 13px), repeating-linear-gradient(90deg, transparent, transparent 12px, rgba(255,255,255,0.2) 12px, rgba(255,255,255,0.2) 13px); }
+.map-label { position: absolute; bottom: 6px; right: 8px; background: white; border-radius: 4px; padding: 2px 6px; font-size: 9px; color: #333; z-index: 1; }
+
+/* Grid layouts */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+/* KYC specific */
+.kyc-doc { border: 0.5px solid #e7e5e4; border-radius: 8px; overflow: hidden; }
+.kyc-doc-img { background: #f5f5f4; height: 70px; display: flex; align-items: center; justify-content: center; border-bottom: 0.5px solid #e7e5e4; }
+.kyc-doc-lbl { padding: 4px 8px; font-size: 9px; color: #78716c; }
+
+/* Driver dot */
+.driver-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-online { background: #1D9E75; }
+.dot-busy { background: #EF9F27; }
+.dot-offline { background: #d6d3d1; }
+
+/* Alert chip */
+.alert-chip { display: inline-flex; align-items: center; gap: 4px; background: #faeeda; color: #854F0B; border-radius: 20px; font-size: 9px; font-weight: 500; padding: 2px 7px; }
+.alert-dot { width: 5px; height: 5px; border-radius: 50%; background: #EF9F27; }
+.alert-chip-red { background: #fcebeb; color: #A32D2D; }
+.alert-dot-red { background: #E24B4A; }
+
+/* Progress bar */
+.progress-wrap { background: #e7e5e4; border-radius: 10px; height: 5px; overflow: hidden; margin-top: 5px; }
+.progress-fill { height: 100%; border-radius: 10px; background: #0F6E56; }
+
+/* Timeline */
+.timeline-item { display: flex; gap: 10px; padding: 6px 0; }
+.timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: #0F6E56; flex-shrink: 0; margin-top: 3px; }
+.timeline-dot-gray { background: #d6d3d1; }
+
+/* Toggle */
+.toggle { width: 28px; height: 16px; border-radius: 8px; background: #0F6E56; position: relative; flex-shrink: 0; }
+.toggle::after { content: ''; position: absolute; top: 2px; left: 14px; width: 12px; height: 12px; border-radius: 50%; background: white; }
+.toggle-off { background: #d6d3d1; }
+.toggle-off::after { left: 2px; }
+
+/* Row utils */
+.row { display: flex; justify-content: space-between; align-items: center; }
+.lbl { font-size: 10px; color: #78716c; }
+.val { font-size: 11px; font-weight: 500; color: #1c1917; }
+
+.chart-bar-wrap { display: flex; align-items: flex-end; gap: 4px; height: 60px; }
+.chart-bar { background: #e1f5ee; border-radius: 3px 3px 0 0; flex: 1; position: relative; }
+.chart-bar.active { background: #0F6E56; }
+.chart-lbl { font-size: 8px; color: #a8a29e; text-align: center; margin-top: 3px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Dashboard Administrateur — SwiftDrop</div>
+<div class="page-sub">Interface de supervision complète · Web</div>
+
+<!-- ===== ÉCRAN 1 : Supervision en temps réel ===== -->
+<div class="section-tag">1. Supervision en temps réel</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">admin.swiftdrop.bj/supervision</div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7 L7 4.5 L9.5 7 L8 7 L8 9.5 L6 9.5 L6 7 Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Administration</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link active">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#0F6E56" stroke-width="1.2"/><circle cx="7" cy="7" r="2" fill="#0F6E56"/></svg>
+          Supervision
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+          Livraisons
+        </div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+          KYC Livreurs
+          <span class="nav-badge">7</span>
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h6M4 8.5h4" stroke="currentColor" stroke-width="1.2"/></svg>
+          Partenaires
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 6h12" stroke="currentColor" stroke-width="1.2"/></svg>
+          Commissions
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M7 1 L13 4 L13 10 L7 13 L1 10 L1 4 Z" stroke="currentColor" stroke-width="1.2"/><path d="M7 5v4M7 9.5v.5" stroke="currentColor" stroke-width="1.2"/></svg>
+          Litiges
+          <span class="nav-badge nav-badge-red">3</span>
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="admin-chip">
+          <div class="admin-avatar">SA</div>
+          <div><div style="font-size: 10px; font-weight: 500; color: #1c1917;">Super Admin</div><div style="font-size: 9px; color: #78716c;">Accès total</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Supervision en temps réel</div>
+          <div style="font-size: 10px; color: #78716c; margin-top: 2px;">Mise à jour toutes les 15 secondes · Mer 29 avr 2026 · 14h32</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 5px; background: #e1f5ee; border-radius: 20px; padding: 4px 10px;">
+            <div style="width: 6px; height: 6px; border-radius: 50%; background: #1D9E75; animation: pulse 1s infinite;"></div>
+            <span style="font-size: 10px; font-weight: 500; color: #0F6E56;">Système opérationnel</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-grid stat-grid-5" style="margin-bottom: 14px;">
+        <div class="stat-card">
+          <div class="stat-val stat-green">34</div>
+          <div class="stat-lbl">Livreurs actifs</div>
+          <div class="stat-delta delta-up">↑ 5 vs hier</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val stat-blue">18</div>
+          <div class="stat-lbl">Livraisons en cours</div>
+          <div class="stat-delta delta-up">↑ 3 vs hier</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">127</div>
+          <div class="stat-lbl">Livrées aujourd'hui</div>
+          <div class="stat-delta delta-up">↑ 12 % vs hier</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val stat-amber">4</div>
+          <div class="stat-lbl">Alertes actives</div>
+          <div class="stat-delta" style="color: #854F0B;">2 retards · 2 GPS</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val stat-red">3</div>
+          <div class="stat-lbl">Litiges ouverts</div>
+          <div class="stat-delta delta-dn">↑ 1 nouveau</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="gap: 14px;">
+        <div>
+          <!-- Map -->
+          <div class="card" style="margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div class="card-title" style="margin-bottom: 0;">Carte des livreurs actifs</div>
+              <div style="display: flex; gap: 8px; align-items: center; font-size: 10px; color: #78716c;">
+                <span style="display:flex;align-items:center;gap:3px;"><span class="driver-dot dot-online"></span>En ligne</span>
+                <span style="display:flex;align-items:center;gap:3px;"><span class="driver-dot dot-busy"></span>En course</span>
+                <span style="display:flex;align-items:center;gap:3px;"><span class="driver-dot dot-offline"></span>Hors ligne</span>
+              </div>
+            </div>
+            <div class="map-mock" style="height: 180px;">
+              <svg width="100%" height="100%" viewBox="0 0 320 160" style="position:absolute;top:0;left:0;z-index:1;">
+                <!-- Routes mockées -->
+                <path d="M20 130 Q80 100 140 80 Q200 60 280 40" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                <path d="M20 80 Q80 90 140 110 Q200 130 280 120" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                <!-- Livreurs en cours (jaune) -->
+                <circle cx="90" cy="95" r="7" fill="#EF9F27" stroke="white" stroke-width="1.5"/>
+                <text x="90" y="98" text-anchor="middle" font-size="7" fill="white">🛵</text>
+                <circle cx="165" cy="78" r="7" fill="#EF9F27" stroke="white" stroke-width="1.5"/>
+                <text x="165" y="81" text-anchor="middle" font-size="7" fill="white">🛵</text>
+                <circle cx="230" cy="60" r="7" fill="#EF9F27" stroke="white" stroke-width="1.5"/>
+                <text x="230" y="63" text-anchor="middle" font-size="7" fill="white">🛵</text>
+                <!-- Livreurs disponibles (vert) -->
+                <circle cx="50" cy="110" r="6" fill="#1D9E75" stroke="white" stroke-width="1.5"/>
+                <circle cx="200" cy="100" r="6" fill="#1D9E75" stroke="white" stroke-width="1.5"/>
+                <circle cx="270" cy="90" r="6" fill="#1D9E75" stroke="white" stroke-width="1.5"/>
+                <!-- Alerte rouge -->
+                <circle cx="130" cy="125" r="7" fill="#E24B4A" stroke="white" stroke-width="1.5"/>
+                <text x="130" y="128" text-anchor="middle" font-size="7" fill="white">!</text>
+              </svg>
+              <div class="map-label">Cotonou · 34 livreurs visibles</div>
+            </div>
+          </div>
+
+          <!-- Alertes -->
+          <div class="card">
+            <div class="card-title">Alertes actives</div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 9px; background: #fcebeb; border-radius: 7px; border-left: 3px solid #E24B4A;">
+                <div>
+                  <div style="font-size: 10px; font-weight: 500; color: #A32D2D;">GPS inactif — Livreur K. Doevi</div>
+                  <div style="font-size: 9px; color: #78716c;">Course #4831 · Sans signal depuis 12 min</div>
+                </div>
+                <button class="btn btn-sm btn-danger">Contacter</button>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 9px; background: #faeeda; border-radius: 7px; border-left: 3px solid #EF9F27;">
+                <div>
+                  <div style="font-size: 10px; font-weight: 500; color: #854F0B;">Retard de livraison — #4828</div>
+                  <div style="font-size: 9px; color: #78716c;">ETA dépassée de 18 min · Client notifié</div>
+                </div>
+                <button class="btn btn-sm btn-amber">Voir</button>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 7px 9px; background: #faeeda; border-radius: 7px; border-left: 3px solid #EF9F27;">
+                <div>
+                  <div style="font-size: 10px; font-weight: 500; color: #854F0B;">DRIVER_NO_SHOW — Course #4819</div>
+                  <div style="font-size: 9px; color: #78716c;">Livreur F. Sossa · Re-broadcast en cours</div>
+                </div>
+                <button class="btn btn-sm btn-amber">Gérer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <!-- Livraisons en cours -->
+          <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div class="card-title" style="margin-bottom: 0;">Livraisons en cours</div>
+              <button class="btn btn-sm">Voir tout</button>
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Livreur</th>
+                  <th>Trajet</th>
+                  <th>ETA</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight: 500; color: #0F6E56;">#4831</td>
+                  <td>K. Doevi</td>
+                  <td style="color: #78716c; font-size: 10px;">Akpakpa→HV</td>
+                  <td><span style="color: #A32D2D; font-weight: 500; font-size: 10px;">⚠ GPS off</span></td>
+                  <td><span class="badge badge-red" style="font-size: 9px;">Alerte</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 500; color: #0F6E56;">#4829</td>
+                  <td>A. Mensah</td>
+                  <td style="color: #78716c; font-size: 10px;">Fidjr→Semè</td>
+                  <td><span style="font-size: 10px; color: #1c1917;">8 min</span></td>
+                  <td><span class="badge badge-blue" style="font-size: 9px;">Transit</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 500; color: #0F6E56;">#4826</td>
+                  <td>F. Sossa</td>
+                  <td style="color: #78716c; font-size: 10px;">Cadj→Akp</td>
+                  <td><span style="font-size: 10px; color: #854F0B;">+18 min</span></td>
+                  <td><span class="badge badge-amber" style="font-size: 9px;">Retard</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 500; color: #0F6E56;">#4824</td>
+                  <td>M. Kpodo</td>
+                  <td style="color: #78716c; font-size: 10px;">Dantokpa→HV</td>
+                  <td><span style="font-size: 10px;">12 min</span></td>
+                  <td><span class="badge badge-blue" style="font-size: 9px;">Transit</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 500; color: #0F6E56;">#4822</td>
+                  <td>P. Agossou</td>
+                  <td style="color: #78716c; font-size: 10px;">Akp→Cadj</td>
+                  <td><span style="font-size: 10px;">3 min</span></td>
+                  <td><span class="badge badge-green" style="font-size: 9px;">Proche</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ÉCRAN 2 : Validation KYC ===== -->
+<div class="section-tag">2. Validation KYC livreurs</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">admin.swiftdrop.bj/kyc</div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7 L7 4.5 L9.5 7 L8 7 L8 9.5 L6 9.5 L6 7 Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Administration</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.2"/></svg>Supervision</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>Livraisons</div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link active"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" fill="#0F6E56"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#0F6E56" stroke-width="1.2"/></svg>KYC Livreurs<span class="nav-badge">7</span></div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 6h6M4 8.5h4" stroke="currentColor" stroke-width="1.2"/></svg>Partenaires</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 6h12" stroke="currentColor" stroke-width="1.2"/></svg>Commissions</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><path d="M7 1 L13 4 L13 10 L7 13 L1 10 L1 4 Z" stroke="currentColor" stroke-width="1.2"/></svg>Litiges<span class="nav-badge nav-badge-red">3</span></div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="admin-chip">
+          <div class="admin-avatar">SA</div>
+          <div><div style="font-size: 10px; font-weight: 500; color: #1c1917;">Super Admin</div><div style="font-size: 9px; color: #78716c;">Accès total</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Validation KYC — Livreurs</div>
+          <div style="font-size: 10px; color: #78716c; margin-top: 2px;">7 dossiers en attente de validation</div>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <select style="font-size: 10px; border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 4px 8px; background: #fff; color: #1c1917; font-family: var(--font-sans);"><option>Tous les statuts</option></select>
+          <select style="font-size: 10px; border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 4px 8px; background: #fff; color: #1c1917; font-family: var(--font-sans);"><option>Trier par date</option></select>
+        </div>
+      </div>
+
+      <!-- Stats KYC -->
+      <div class="stat-grid" style="grid-template-columns: repeat(4,1fr); margin-bottom: 14px;">
+        <div class="stat-card"><div class="stat-val stat-amber">7</div><div class="stat-lbl">En attente</div></div>
+        <div class="stat-card"><div class="stat-val stat-green">83</div><div class="stat-lbl">Validés</div></div>
+        <div class="stat-card"><div class="stat-val stat-red">12</div><div class="stat-lbl">Rejetés</div></div>
+        <div class="stat-card"><div class="stat-val stat-amber">3</div><div class="stat-lbl">Suspendus</div></div>
+      </div>
+
+      <!-- File d'attente -->
+      <div class="card" style="margin-bottom: 14px;">
+        <div class="card-title">File d'attente — En attente de validation</div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Candidat</th>
+              <th>Téléphone</th>
+              <th>Véhicule</th>
+              <th>Soumis le</th>
+              <th>Documents</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #f9fafb;">
+              <td>
+                <div style="font-weight: 500;">Serge Akakpo</div>
+                <div style="font-size: 9px; color: #78716c;">Nouveau</div>
+              </td>
+              <td>+229 97 44 21 08</td>
+              <td><span class="badge badge-green">Moto</span></td>
+              <td style="color: #78716c; font-size: 10px;">Aujourd'hui 13h45</td>
+              <td>
+                <div style="display: flex; gap: 4px;">
+                  <span style="font-size: 9px; background: #e1f5ee; color: #0F6E56; padding: 2px 5px; border-radius: 4px;">CNI ✓</span>
+                  <span style="font-size: 9px; background: #e1f5ee; color: #0F6E56; padding: 2px 5px; border-radius: 4px;">Véhicule ✓</span>
+                </div>
+              </td>
+              <td>
+                <div style="display: flex; gap: 4px;">
+                  <button class="btn btn-primary btn-sm">Valider</button>
+                  <button class="btn btn-danger btn-sm">Rejeter</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight: 500;">Aïcha Bello</div>
+                <div style="font-size: 9px; color: #78716c;">Nouveau</div>
+              </td>
+              <td>+229 96 78 90 12</td>
+              <td><span class="badge badge-blue">Voiture</span></td>
+              <td style="color: #78716c; font-size: 10px;">Aujourd'hui 11h20</td>
+              <td>
+                <div style="display: flex; gap: 4px;">
+                  <span style="font-size: 9px; background: #e1f5ee; color: #0F6E56; padding: 2px 5px; border-radius: 4px;">CNI ✓</span>
+                  <span style="font-size: 9px; background: #faeeda; color: #854F0B; padding: 2px 5px; border-radius: 4px;">Véhicule ?</span>
+                </div>
+              </td>
+              <td>
+                <div style="display: flex; gap: 4px;">
+                  <button class="btn btn-sm" style="color: #185FA5; border-color: #bfd8f8;">Examiner</button>
+                  <button class="btn btn-danger btn-sm">Rejeter</button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight: 500;">Luc Tossou</div>
+                <div style="font-size: 9px; color: #78716c;">Nouveau</div>
+              </td>
+              <td>+229 97 11 23 45</td>
+              <td><span class="badge badge-green">Moto</span></td>
+              <td style="color: #78716c; font-size: 10px;">Hier 17h05</td>
+              <td>
+                <div style="display: flex; gap: 4px;">
+                  <span style="font-size: 9px; background: #e1f5ee; color: #0F6E56; padding: 2px 5px; border-radius: 4px;">CNI ✓</span>
+                  <span style="font-size: 9px; background: #e1f5ee; color: #0F6E56; padding: 2px 5px; border-radius: 4px;">Véhicule ✓</span>
+                </div>
+              </td>
+              <td>
+                <div style="display: flex; gap: 4px;">
+                  <button class="btn btn-primary btn-sm">Valider</button>
+                  <button class="btn btn-danger btn-sm">Rejeter</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Dossier détaillé -->
+      <div class="card" style="border: 1.5px solid #0F6E56;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <div style="width: 36px; height: 36px; border-radius: 50%; background: #e1f5ee; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #0F6E56; border: 1.5px solid #0F6E56;">SA</div>
+          <div>
+            <div style="font-size: 12px; font-weight: 600; color: #1c1917;">Serge Akakpo — Dossier en cours d'examen</div>
+            <div style="font-size: 10px; color: #78716c;">+229 97 44 21 08 · Moto · Cotonou</div>
+          </div>
+          <div style="margin-left: auto;"><span class="badge badge-amber">En attente</span></div>
+        </div>
+        <div class="three-col">
+          <div class="kyc-doc">
+            <div class="kyc-doc-img">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="6" width="32" height="22" rx="3" stroke="#d6d3d1" stroke-width="1.5"/><circle cx="20" cy="14" r="5" stroke="#d6d3d1" stroke-width="1.5"/><path d="M8 28c0-5 5.4-9 12-9s12 4 12 9" stroke="#d6d3d1" stroke-width="1.5"/></svg>
+            </div>
+            <div class="kyc-doc-lbl">CNI recto</div>
+          </div>
+          <div class="kyc-doc">
+            <div class="kyc-doc-img">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="6" width="32" height="22" rx="3" stroke="#d6d3d1" stroke-width="1.5"/><rect x="8" y="10" width="10" height="8" rx="1" stroke="#d6d3d1" stroke-width="1.5"/><path d="M22 12h10M22 16h8M22 20h6" stroke="#d6d3d1" stroke-width="1.5"/></svg>
+            </div>
+            <div class="kyc-doc-lbl">CNI verso</div>
+          </div>
+          <div class="kyc-doc">
+            <div class="kyc-doc-img">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M8 32 Q20 20 32 28" stroke="#d6d3d1" stroke-width="1.5" fill="none"/><circle cx="16" cy="20" r="3" stroke="#d6d3d1" stroke-width="1.5"/><ellipse cx="24" cy="26" rx="6" ry="4" stroke="#d6d3d1" stroke-width="1.5"/></svg>
+            </div>
+            <div class="kyc-doc-lbl">Photo véhicule</div>
+          </div>
+        </div>
+        <div class="sep"></div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+          <button class="btn btn-sm" style="padding: 5px 12px;">Demander un document</button>
+          <button class="btn btn-danger btn-sm" style="padding: 5px 12px;">Rejeter (motif requis)</button>
+          <button class="btn btn-primary btn-sm" style="padding: 5px 14px; font-size: 10px;">✓ Valider le KYC</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ÉCRAN 3 : Gestion des partenaires ===== -->
+<div class="section-tag">3. Gestion des partenaires</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">admin.swiftdrop.bj/partenaires</div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7 L7 4.5 L9.5 7 L8 7 L8 9.5 L6 9.5 L6 7 Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Administration</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.2"/></svg>Supervision</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>Livraisons</div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>KYC Livreurs<span class="nav-badge">7</span></div>
+        <div class="nav-link active"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="#0F6E56" stroke-width="1.2"/><path d="M4 6h6M4 8.5h4" stroke="#0F6E56" stroke-width="1.2"/></svg>Partenaires</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 6h12" stroke="currentColor" stroke-width="1.2"/></svg>Commissions</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><path d="M7 1 L13 4 L13 10 L7 13 L1 10 L1 4 Z" stroke="currentColor" stroke-width="1.2"/></svg>Litiges<span class="nav-badge nav-badge-red">3</span></div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="admin-chip">
+          <div class="admin-avatar">SA</div>
+          <div><div style="font-size: 10px; font-weight: 500; color: #1c1917;">Super Admin</div><div style="font-size: 9px; color: #78716c;">Accès total</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="content-header">
+        <div><div class="content-title">Gestion des partenaires</div><div style="font-size: 10px; color: #78716c; margin-top: 2px;">12 partenaires actifs · 2 en attente d'activation</div></div>
+        <button class="btn btn-primary" style="font-size: 11px; padding: 6px 14px;">+ Nouveau partenaire</button>
+      </div>
+
+      <div class="stat-grid" style="grid-template-columns: repeat(4,1fr); margin-bottom: 14px;">
+        <div class="stat-card"><div class="stat-val stat-green">12</div><div class="stat-lbl">Actifs</div></div>
+        <div class="stat-card"><div class="stat-val stat-amber">2</div><div class="stat-lbl">En attente</div></div>
+        <div class="stat-card"><div class="stat-val stat-red">1</div><div class="stat-lbl">Suspendus</div></div>
+        <div class="stat-card"><div class="stat-val">487</div><div class="stat-lbl">Livraisons ce mois</div></div>
+      </div>
+
+      <div class="two-col" style="gap:14px;">
+        <div>
+          <div class="card">
+            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+              <input style="flex:1; border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 5px 10px; font-size: 11px; font-family: var(--font-sans);" placeholder="Rechercher un partenaire..." />
+              <select style="font-size: 10px; border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 5px 8px; background: #fff; font-family: var(--font-sans);"><option>Tous types</option></select>
+            </div>
+            <table class="table">
+              <thead>
+                <tr><th>Partenaire</th><th>Type</th><th>Zone</th><th>Livr./mois</th><th>Statut</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr style="background: #f0faf6;">
+                  <td><div style="font-weight: 500;">La Terrasse</div><div style="font-size: 9px; color: #78716c;">Akpakpa</div></td>
+                  <td><span class="badge badge-blue" style="font-size: 9px;">Restaurant</span></td>
+                  <td style="font-size: 10px; color: #78716c;">5 km</td>
+                  <td style="font-weight: 500;">214</td>
+                  <td><span class="badge badge-green" style="font-size: 9px;">Actif</span></td>
+                  <td><button class="btn btn-sm">Gérer</button></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight: 500;">Pharmaco Plus</div><div style="font-size: 9px; color: #78716c;">Cadjèhoun</div></td>
+                  <td><span class="badge badge-purple" style="font-size: 9px;">Pharmacie</span></td>
+                  <td style="font-size: 10px; color: #78716c;">3 km</td>
+                  <td style="font-weight: 500;">89</td>
+                  <td><span class="badge badge-green" style="font-size: 9px;">Actif</span></td>
+                  <td><button class="btn btn-sm">Gérer</button></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight: 500;">Supermarché Géant</div><div style="font-size: 9px; color: #78716c;">Haie Vive</div></td>
+                  <td><span class="badge badge-amber" style="font-size: 9px;">Supermarché</span></td>
+                  <td style="font-size: 10px; color: #78716c;">8 km</td>
+                  <td style="font-weight: 500;">134</td>
+                  <td><span class="badge badge-green" style="font-size: 9px;">Actif</span></td>
+                  <td><button class="btn btn-sm">Gérer</button></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight: 500;">Boulangerie Épi d'Or</div><div style="font-size: 9px; color: #78716c;">Fidjrossè</div></td>
+                  <td><span class="badge badge-gray" style="font-size: 9px;">Autre</span></td>
+                  <td style="font-size: 10px; color: #78716c;">4 km</td>
+                  <td style="font-weight: 500;">27</td>
+                  <td><span class="badge badge-amber" style="font-size: 9px;">En attente</span></td>
+                  <td><button class="btn btn-primary btn-sm">Activer</button></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight: 500;">Fast Food Cocotier</div><div style="font-size: 9px; color: #78716c;">Dantokpa</div></td>
+                  <td><span class="badge badge-blue" style="font-size: 9px;">Restaurant</span></td>
+                  <td style="font-size: 10px; color: #78716c;">3 km</td>
+                  <td style="font-weight: 500; color: #A32D2D;">0</td>
+                  <td><span class="badge badge-red" style="font-size: 9px;">Suspendu</span></td>
+                  <td><button class="btn btn-sm">Voir</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Formulaire nouveau partenaire -->
+        <div>
+          <div class="card" style="border: 1.5px solid #0F6E56;">
+            <div class="card-title" style="color: #0F6E56;">Créer un partenaire</div>
+            <div style="display: flex; flex-direction: column; gap: 7px;">
+              <div>
+                <div class="lbl" style="margin-bottom: 3px;">Nom du partenaire</div>
+                <div style="border: 0.5px solid #0F6E56; border-radius: 7px; padding: 6px 10px; font-size: 11px; color: #1c1917; background: #f9fafb;">Nouveau Restaurant...</div>
+              </div>
+              <div>
+                <div class="lbl" style="margin-bottom: 3px;">Type d'établissement</div>
+                <div style="border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 6px 10px; font-size: 11px; color: #78716c; background: #f9fafb;">Restaurant ▾</div>
+              </div>
+              <div>
+                <div class="lbl" style="margin-bottom: 3px;">Adresse</div>
+                <div style="border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 6px 10px; font-size: 11px; color: #78716c; background: #f9fafb;">Quartier, Cotonou</div>
+              </div>
+              <div class="two-col" style="gap: 6px;">
+                <div>
+                  <div class="lbl" style="margin-bottom: 3px;">Téléphone</div>
+                  <div style="border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 6px 10px; font-size: 11px; color: #78716c; background: #f9fafb;">+229...</div>
+                </div>
+                <div>
+                  <div class="lbl" style="margin-bottom: 3px;">Rayon livraison</div>
+                  <div style="border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 6px 10px; font-size: 11px; color: #78716c; background: #f9fafb;">5 km ▾</div>
+                </div>
+              </div>
+              <div>
+                <div class="lbl" style="margin-bottom: 3px;">Taux de commission</div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <div style="border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 6px 10px; font-size: 11px; color: #1c1917; background: #f9fafb; flex: 1;">15</div>
+                  <span style="font-size: 11px; color: #78716c;">%</span>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width: 100%; padding: 7px; font-size: 11px; margin-top: 4px;">Créer et activer le partenaire</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ÉCRAN 4 : Commissions & Retraits ===== -->
+<div class="section-tag">4. Commissions & Retraits livreurs</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">admin.swiftdrop.bj/commissions</div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7 L7 4.5 L9.5 7 L8 7 L8 9.5 L6 9.5 L6 7 Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Administration</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>Supervision</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>Livraisons</div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>KYC Livreurs<span class="nav-badge">7</span></div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/></svg>Partenaires</div>
+        <div class="nav-link active"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="#0F6E56" stroke-width="1.2"/><path d="M1 6h12" stroke="#0F6E56" stroke-width="1.2"/></svg>Commissions</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><path d="M7 1 L13 4 L13 10 L7 13 L1 10 L1 4 Z" stroke="currentColor" stroke-width="1.2"/></svg>Litiges<span class="nav-badge nav-badge-red">3</span></div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="admin-chip">
+          <div class="admin-avatar">SA</div>
+          <div><div style="font-size: 10px; font-weight: 500; color: #1c1917;">Super Admin</div><div style="font-size: 9px; color: #78716c;">Accès total</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="content-header">
+        <div><div class="content-title">Commissions & Retraits</div><div style="font-size: 10px; color: #78716c; margin-top: 2px;">Avril 2026 · 5 retraits en attente de validation</div></div>
+        <div style="display: flex; gap: 6px;">
+          <select style="font-size: 10px; border: 0.5px solid #d6d3d1; border-radius: 7px; padding: 4px 8px; background: #fff; font-family: var(--font-sans);"><option>Avril 2026</option></select>
+          <button class="btn btn-sm">Exporter CSV</button>
+        </div>
+      </div>
+
+      <div class="stat-grid stat-grid-4" style="margin-bottom: 14px;">
+        <div class="stat-card">
+          <div class="stat-val stat-green">1 248 500</div>
+          <div class="stat-lbl">Revenus SwiftDrop (FCFA)</div>
+          <div class="stat-delta delta-up">↑ 18 % vs mars</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">7 090 800</div>
+          <div class="stat-lbl">Versé aux livreurs (FCFA)</div>
+          <div class="stat-delta delta-up">↑ 14 %</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val stat-amber">5</div>
+          <div class="stat-lbl">Retraits en attente</div>
+          <div style="font-size: 10px; color: #854F0B; margin-top: 4px;">62 000 FCFA total</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val">15 %</div>
+          <div class="stat-lbl">Taux de commission moyen</div>
+          <div style="font-size: 10px; color: #78716c; margin-top: 4px;">Configurable par zone</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="gap: 14px;">
+        <div>
+          <!-- Retraits en attente -->
+          <div class="card" style="margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <div class="card-title" style="margin-bottom: 0;">Retraits en attente</div>
+              <div class="alert-chip"><div class="alert-dot"></div>5 à traiter</div>
+            </div>
+            <table class="table">
+              <thead><tr><th>Livreur</th><th>Montant</th><th>Opérateur</th><th>Demandé le</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight: 500;">Kofi Doevi</td>
+                  <td style="font-weight: 500; color: #0F6E56;">18 450 FCFA</td>
+                  <td><span class="badge badge-amber" style="font-size: 9px;">MTN MoMo</span></td>
+                  <td style="color: #78716c; font-size: 10px;">Aujourd'hui 09:14</td>
+                  <td><div style="display: flex; gap: 4px;"><button class="btn btn-primary btn-sm">Valider</button><button class="btn btn-danger btn-sm">Refuser</button></div></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 500;">Ama Mensah</td>
+                  <td style="font-weight: 500; color: #0F6E56;">12 200 FCFA</td>
+                  <td><span class="badge badge-blue" style="font-size: 9px;">Moov Africa</span></td>
+                  <td style="color: #78716c; font-size: 10px;">Hier 16:30</td>
+                  <td><div style="display: flex; gap: 4px;"><button class="btn btn-primary btn-sm">Valider</button><button class="btn btn-danger btn-sm">Refuser</button></div></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 500;">F. Sossa</td>
+                  <td style="font-weight: 500; color: #0F6E56;">5 800 FCFA</td>
+                  <td><span class="badge badge-amber" style="font-size: 9px;">MTN MoMo</span></td>
+                  <td style="color: #78716c; font-size: 10px;">Hier 11:05</td>
+                  <td><div style="display: flex; gap: 4px;"><button class="btn btn-primary btn-sm">Valider</button><button class="btn btn-danger btn-sm">Refuser</button></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Config taux -->
+          <div class="card">
+            <div class="card-title">Configuration des taux de commission</div>
+            <table class="table">
+              <thead><tr><th>Zone / Type</th><th>Taux actuel</th><th>Part livreur</th><th></th></tr></thead>
+              <tbody>
+                <tr><td>Cotonou — Restaurant</td><td style="font-weight:500;">15 %</td><td style="color: #0F6E56; font-weight:500;">85 %</td><td><button class="btn btn-sm">Modifier</button></td></tr>
+                <tr><td>Cotonou — Pharmacie</td><td style="font-weight:500;">12 %</td><td style="color: #0F6E56; font-weight:500;">88 %</td><td><button class="btn btn-sm">Modifier</button></td></tr>
+                <tr><td>Cotonou — Supermarché</td><td style="font-weight:500;">15 %</td><td style="color: #0F6E56; font-weight:500;">85 %</td><td><button class="btn btn-sm">Modifier</button></td></tr>
+                <tr><td>Cotonou — Client direct</td><td style="font-weight:500;">15 %</td><td style="color: #0F6E56; font-weight:500;">85 %</td><td><button class="btn btn-sm">Modifier</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <!-- Graphique revenus -->
+          <div class="card" style="margin-bottom: 12px;">
+            <div class="card-title">Revenus SwiftDrop — Avril 2026</div>
+            <div class="chart-bar-wrap">
+              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;"><div class="chart-bar" style="height: 30px;"></div><div class="chart-lbl">1</div></div>
+              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;"><div class="chart-bar" style="height: 38px;"></div><div class="chart-lbl">5</div></div>
+              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;"><div class="chart-bar" style="height: 45px;"></div><div class="chart-lbl">10</div></div>
+              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;"><div class="chart-bar" style="height: 40px;"></div><div class="chart-lbl">15</div></div>
+              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;"><div class="chart-bar" style="height: 52px;"></div><div class="chart-lbl">20</div></div>
+              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;"><div class="chart-bar" style="height: 48px;"></div><div class="chart-lbl">25</div></div>
+              <div style="display: flex; flex-direction: column; align-items: center; flex: 1;"><div class="chart-bar active" style="height: 60px;"></div><div class="chart-lbl">29</div></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 10px; color: #78716c;">
+              <span>Total mois : <strong style="color: #0F6E56;">1 248 500 FCFA</strong></span>
+              <span>Objectif : 1 500 000</span>
+            </div>
+            <div class="progress-wrap" style="margin-top: 5px;"><div class="progress-fill" style="width: 83%;"></div></div>
+            <div style="font-size: 9px; color: #78716c; margin-top: 3px; text-align: right;">83 % de l'objectif</div>
+          </div>
+
+          <!-- Top livreurs -->
+          <div class="card">
+            <div class="card-title">Top livreurs du mois</div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; align-items: center; gap: 8px; padding: 6px; background: #f0faf6; border-radius: 7px;">
+                <div style="width: 20px; height: 20px; border-radius: 50%; background: #0F6E56; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: white;">1</div>
+                <div style="flex: 1;"><div style="font-size: 11px; font-weight: 500;">Kofi Doevi</div><div style="font-size: 9px; color: #78716c;">52 courses · ★ 4.8</div></div>
+                <div style="font-size: 11px; font-weight: 500; color: #0F6E56;">44 200 FCFA</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 7px;">
+                <div style="width: 20px; height: 20px; border-radius: 50%; background: #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #78716c;">2</div>
+                <div style="flex: 1;"><div style="font-size: 11px; font-weight: 500;">Ama Mensah</div><div style="font-size: 9px; color: #78716c;">41 courses · ★ 4.6</div></div>
+                <div style="font-size: 11px; font-weight: 500; color: #0F6E56;">34 850 FCFA</div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 7px;">
+                <div style="width: 20px; height: 20px; border-radius: 50%; background: #d6d3d1; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #78716c;">3</div>
+                <div style="flex: 1;"><div style="font-size: 11px; font-weight: 500;">Fatou Diallo</div><div style="font-size: 9px; color: #78716c;">38 courses · ★ 4.9</div></div>
+                <div style="font-size: 11px; font-weight: 500; color: #0F6E56;">32 300 FCFA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ÉCRAN 5 : Gestion des litiges ===== -->
+<div class="section-tag">5. Gestion des litiges</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">admin.swiftdrop.bj/litiges</div>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7 L7 4.5 L9.5 7 L8 7 L8 9.5 L6 9.5 L6 7 Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Administration</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>Supervision</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>Livraisons</div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>KYC Livreurs<span class="nav-badge">7</span></div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/></svg>Partenaires</div>
+        <div class="nav-link"><svg viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 6h12" stroke="currentColor" stroke-width="1.2"/></svg>Commissions</div>
+        <div class="nav-link active"><svg viewBox="0 0 14 14" fill="none"><path d="M7 1 L13 4 L13 10 L7 13 L1 10 L1 4 Z" fill="#0F6E56"/><path d="M7 5v3M7 9.5v.5" stroke="white" stroke-width="1.2"/></svg>Litiges<span class="nav-badge nav-badge-red">3</span></div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="admin-chip">
+          <div class="admin-avatar">SA</div>
+          <div><div style="font-size: 10px; font-weight: 500; color: #1c1917;">Super Admin</div><div style="font-size: 9px; color: #78716c;">Accès total</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="content-header">
+        <div><div class="content-title">Gestion des litiges</div><div style="font-size: 10px; color: #78716c; margin-top: 2px;">3 litiges ouverts · 1 signalement partenaire</div></div>
+        <div class="alert-chip alert-chip-red"><div class="alert-dot alert-dot-red"></div>Action requise</div>
+      </div>
+
+      <div class="stat-grid" style="grid-template-columns: repeat(4,1fr); margin-bottom: 14px;">
+        <div class="stat-card"><div class="stat-val stat-red">3</div><div class="stat-lbl">Litiges ouverts</div></div>
+        <div class="stat-card"><div class="stat-val stat-amber">1</div><div class="stat-lbl">Signalements</div></div>
+        <div class="stat-card"><div class="stat-val stat-green">28</div><div class="stat-lbl">Résolus ce mois</div></div>
+        <div class="stat-card"><div class="stat-val">1,8 %</div><div class="stat-lbl">Taux de litige</div></div>
+      </div>
+
+      <div class="two-col" style="gap: 14px;">
+        <!-- Liste litiges -->
+        <div>
+          <div class="card" style="margin-bottom: 12px;">
+            <div class="card-title">Litiges en cours</div>
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="border: 1.5px solid #E24B4A; border-radius: 8px; padding: 10px; background: #fff;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+                  <div>
+                    <div style="font-size: 11px; font-weight: 500; color: #1c1917;">Course #4827 — Colis non reçu</div>
+                    <div style="font-size: 10px; color: #78716c;">Client : Marie Kpodo · Livreur : K. Doevi</div>
+                  </div>
+                  <span class="badge badge-red">Urgent</span>
+                </div>
+                <div style="font-size: 10px; color: #78716c; margin-bottom: 6px;">"Le livreur indique avoir livré mais je n'ai rien reçu. Personne n'a confirmé ma réception."</div>
+                <div style="display: flex; gap: 5px;">
+                  <button class="btn btn-sm" style="font-size: 9px; color: #185FA5; border-color: #bfd8f8;">Voir GPS</button>
+                  <button class="btn btn-sm" style="font-size: 9px; color: #185FA5; border-color: #bfd8f8;">Voir photos</button>
+                  <button class="btn btn-primary btn-sm" style="font-size: 9px;">Instruire</button>
+                </div>
+              </div>
+              <div style="border: 0.5px solid #e7e5e4; border-radius: 8px; padding: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                  <div>
+                    <div style="font-size: 11px; font-weight: 500;">Course #4815 — Livreur non conforme</div>
+                    <div style="font-size: 10px; color: #78716c;">Signalé par : La Terrasse · Livreur suspect</div>
+                  </div>
+                  <span class="badge badge-amber">En cours</span>
+                </div>
+                <div style="font-size: 10px; color: #78716c; margin-bottom: 5px;">"La personne présentée ne correspond pas à la photo KYC."</div>
+                <div style="display: flex; gap: 5px;">
+                  <button class="btn btn-sm btn-danger" style="font-size: 9px;">Suspendre compte</button>
+                  <button class="btn btn-sm" style="font-size: 9px;">Clôturer</button>
+                </div>
+              </div>
+              <div style="border: 0.5px solid #e7e5e4; border-radius: 8px; padding: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
+                  <div>
+                    <div style="font-size: 11px; font-weight: 500;">Course #4801 — Colis endommagé</div>
+                    <div style="font-size: 10px; color: #78716c;">Client : Ibrahim Sow · Type : Fragile</div>
+                  </div>
+                  <span class="badge badge-amber">En cours</span>
+                </div>
+                <div style="font-size: 10px; color: #78716c; margin-bottom: 5px;">"Colis fragile reçu cassé. Photo à l'appui."</div>
+                <div style="display: flex; gap: 5px;">
+                  <button class="btn btn-sm" style="font-size: 9px;">Voir photos</button>
+                  <button class="btn btn-primary btn-sm" style="font-size: 9px;">Rembourser client</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Investigation #4827 -->
+        <div>
+          <div class="card" style="border: 1.5px solid #E24B4A;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 10px;">
+              <div style="width: 6px; height: 6px; border-radius: 50%; background: #E24B4A;"></div>
+              <div class="card-title" style="margin-bottom: 0; color: #A32D2D;">Investigation — #4827</div>
+            </div>
+
+            <!-- Timeline GPS -->
+            <div style="font-size: 10px; font-weight: 500; color: #78716c; margin-bottom: 6px;">Historique GPS</div>
+            <div style="display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px;">
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div style="font-size: 10px;"><span style="color: #78716c;">14:12 —</span> PICKED_UP chez La Terrasse, Akpakpa</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div style="font-size: 10px;"><span style="color: #78716c;">14:18 —</span> En transit · Rue du Récasement</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div style="font-size: 10px;"><span style="color: #78716c;">14:24 —</span> Arrivée zone destination (Akpakpa)</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot timeline-dot-gray"></div>
+                <div style="font-size: 10px; color: #78716c;">14:26 — GPS arrêté (bouton DELIVERED)</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot timeline-dot-gray"></div>
+                <div style="font-size: 10px; color: #78716c;">14:26 → 15:26 — Aucune confirmation client</div>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+
+            <!-- Preuves -->
+            <div style="font-size: 10px; font-weight: 500; color: #78716c; margin-bottom: 6px;">Preuves disponibles</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px;">
+              <div style="border: 0.5px solid #e7e5e4; border-radius: 7px; overflow: hidden;">
+                <div style="background: #f5f5f4; height: 50px; display: flex; align-items: center; justify-content: center;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="6" width="20" height="14" rx="2" stroke="#d6d3d1" stroke-width="1.5"/><circle cx="12" cy="13" r="3" stroke="#d6d3d1" stroke-width="1.5"/></svg>
+                </div>
+                <div style="padding: 4px 6px; font-size: 9px; color: #78716c;">Photo collecte (14:12)</div>
+              </div>
+              <div style="border: 0.5px solid #e7e5e4; border-radius: 7px; overflow: hidden;">
+                <div style="background: #fcebeb; height: 50px; display: flex; align-items: center; justify-content: center;">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 8v5M12 15v1" stroke="#E24B4A" stroke-width="2"/><circle cx="12" cy="12" r="9" stroke="#E24B4A" stroke-width="1.5"/></svg>
+                </div>
+                <div style="padding: 4px 6px; font-size: 9px; color: #A32D2D;">Photo livraison manquante</div>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+            <div style="font-size: 10px; font-weight: 500; color: #78716c; margin-bottom: 6px;">Décision administrative</div>
+            <div style="display: flex; flex-direction: column; gap: 5px;">
+              <button class="btn btn-primary" style="width: 100%; padding: 7px; font-size: 10px;">Rembourser le client (6 100 FCFA)</button>
+              <button class="btn btn-danger" style="width: 100%; padding: 7px; font-size: 10px;">Suspendre le livreur</button>
+              <button class="btn" style="width: 100%; padding: 7px; font-size: 10px;">Clôturer sans suite</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

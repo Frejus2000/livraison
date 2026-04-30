@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftDrop — Portail Partenaire</title>
+<style>
+:root {
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f5f5f4;
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #78716c;
+  --color-border-secondary: #d6d3d1;
+  --color-border-tertiary: #e7e5e4;
+  --font-sans: 'Segoe UI', system-ui, sans-serif;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: #f0faf6; padding: 32px; }
+
+.page-title { font-size: 15px; font-weight: 600; color: #1c1917; margin-bottom: 6px; }
+.page-sub   { font-size: 12px; color: #78716c; margin-bottom: 28px; }
+.section-tag { display: inline-block; font-size: 12px; font-weight: 500; color: #0F6E56; margin-bottom: 12px; border-bottom: 2px solid #0F6E56; padding-bottom: 3px; }
+
+/* ── Browser frame (identique admin) ── */
+.browser-frame { background: #fff; border: 0.5px solid #d6d3d1; border-radius: 12px; overflow: hidden; margin-bottom: 40px; }
+.browser-bar   { background: #f5f5f4; border-bottom: 0.5px solid #e7e5e4; padding: 8px 14px; display: flex; align-items: center; gap: 10px; }
+.browser-dots  { display: flex; gap: 4px; }
+.browser-dot   { width: 8px; height: 8px; border-radius: 50%; background: #d6d3d1; }
+.browser-url   { flex: 1; background: #fff; border: 0.5px solid #e7e5e4; border-radius: 6px; padding: 3px 10px; font-size: 11px; color: #78716c; }
+
+.layout { display: flex; min-height: 500px; }
+
+/* ── Sidebar ── */
+.sidebar { width: 180px; border-right: 0.5px solid #e7e5e4; padding: 16px 0; flex-shrink: 0; display: flex; flex-direction: column; background: #fff; }
+.sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 0 14px 16px; border-bottom: 0.5px solid #e7e5e4; margin-bottom: 12px; }
+.logo-mark { width: 26px; height: 26px; background: #0F6E56; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.logo-text { font-size: 13px; font-weight: 600; color: #1c1917; }
+.logo-sub  { font-size: 9px; color: #78716c; }
+.nav-group { padding: 0 8px; flex: 1; }
+.nav-section { font-size: 9px; font-weight: 600; color: #a8a29e; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 8px 4px; }
+.nav-link { display: flex; align-items: center; gap: 8px; padding: 7px 8px; border-radius: 7px; font-size: 11px; color: #78716c; margin-bottom: 1px; cursor: pointer; }
+.nav-link.active { background: #e1f5ee; color: #0F6E56; font-weight: 500; }
+.nav-link svg { width: 14px; height: 14px; flex-shrink: 0; }
+.nav-badge { margin-left: auto; background: #0F6E56; color: white; font-size: 9px; border-radius: 10px; padding: 1px 6px; font-weight: 600; }
+.nav-badge-red { background: #E24B4A; }
+.sidebar-bottom { padding: 12px 14px 0; border-top: 0.5px solid #e7e5e4; margin-top: 12px; }
+.partner-chip { display: flex; align-items: center; gap: 8px; }
+.partner-avatar { width: 26px; height: 26px; border-radius: 50%; background: #0F6E56; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; color: white; flex-shrink: 0; }
+
+/* ── Main ── */
+.main { flex: 1; padding: 20px; background: #f9fafb; overflow: hidden; }
+.content-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.content-title  { font-size: 14px; font-weight: 600; color: #1c1917; }
+
+/* ── Stat cards ── */
+.stat-grid   { display: grid; gap: 10px; margin-bottom: 16px; }
+.stat-grid-4 { grid-template-columns: repeat(4, 1fr); }
+.stat-card   { background: #fff; border: 0.5px solid #e7e5e4; border-radius: 10px; padding: 12px 14px; }
+.stat-val    { font-size: 22px; font-weight: 600; color: #1c1917; }
+.stat-lbl    { font-size: 10px; color: #78716c; margin-top: 2px; }
+.stat-green  { color: #0F6E56; }
+.stat-amber  { color: #854F0B; }
+.stat-red    { color: #A32D2D; }
+.stat-blue   { color: #185FA5; }
+.stat-delta  { font-size: 10px; margin-top: 4px; }
+.delta-up    { color: #0F6E56; }
+.delta-dn    { color: #E24B4A; }
+
+/* ── Badges ── */
+.badge        { display: inline-flex; align-items: center; border-radius: 20px; font-size: 10px; font-weight: 500; padding: 2px 8px; }
+.badge-green  { background: #e1f5ee; color: #0F6E56; }
+.badge-amber  { background: #faeeda; color: #854F0B; }
+.badge-blue   { background: #e6f1fb; color: #185FA5; }
+.badge-red    { background: #fcebeb; color: #A32D2D; }
+.badge-gray   { background: #f5f5f4; color: #78716c; }
+.badge-purple { background: #f3e8ff; color: #7c3aed; }
+
+/* ── Tables ── */
+.table    { width: 100%; border-collapse: collapse; font-size: 11px; }
+.table th { text-align: left; font-size: 10px; font-weight: 500; color: #78716c; padding: 0 8px 8px; border-bottom: 0.5px solid #e7e5e4; }
+.table td { padding: 9px 8px; border-bottom: 0.5px solid #e7e5e4; color: #1c1917; vertical-align: middle; }
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #f9fafb; }
+
+/* ── Cards ── */
+.card       { background: #fff; border: 0.5px solid #e7e5e4; border-radius: 10px; padding: 12px 14px; }
+.card-title { font-size: 11px; font-weight: 600; color: #1c1917; margin-bottom: 8px; }
+.sep        { height: 0.5px; background: #e7e5e4; margin: 8px 0; }
+
+/* ── Buttons ── */
+.btn         { border: 0.5px solid #d6d3d1; border-radius: 7px; background: #fff; color: #1c1917; font-size: 10px; padding: 4px 10px; cursor: pointer; font-family: var(--font-sans); }
+.btn-primary { background: #0F6E56; border-color: #0F6E56; color: white; }
+.btn-danger  { background: #fcebeb; border-color: #F7C1C1; color: #A32D2D; }
+.btn-amber   { background: #faeeda; border-color: #f5d19a; color: #854F0B; }
+.btn-sm      { padding: 3px 8px; font-size: 9px; }
+
+/* ── Map mock ── */
+.map-mock { background: linear-gradient(135deg, #c8e6c9, #a5d6a7); border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.map-mock::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 12px, rgba(255,255,255,0.2) 12px, rgba(255,255,255,0.2) 13px), repeating-linear-gradient(90deg, transparent, transparent 12px, rgba(255,255,255,0.2) 12px, rgba(255,255,255,0.2) 13px); }
+.map-label { position: absolute; bottom: 6px; right: 8px; background: white; border-radius: 4px; padding: 2px 6px; font-size: 9px; color: #333; z-index: 1; }
+
+/* ── Grids ── */
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+
+/* ── Progress bar ── */
+.progress-wrap { background: #e7e5e4; border-radius: 10px; height: 5px; overflow: hidden; margin-top: 5px; }
+.progress-fill { height: 100%; border-radius: 10px; background: #0F6E56; }
+
+/* ── Toggle ── */
+.toggle { width: 28px; height: 16px; border-radius: 8px; background: #0F6E56; position: relative; flex-shrink: 0; }
+.toggle::after { content: ''; position: absolute; top: 2px; left: 14px; width: 12px; height: 12px; border-radius: 50%; background: white; }
+.toggle-off { background: #d6d3d1; }
+.toggle-off::after { left: 2px; }
+
+/* ── Row utils ── */
+.row { display: flex; justify-content: space-between; align-items: center; }
+.lbl { font-size: 10px; color: #78716c; }
+.val { font-size: 11px; font-weight: 500; color: #1c1917; }
+
+/* ── Timeline ── */
+.timeline-item { display: flex; gap: 10px; padding: 5px 0; }
+.timeline-dot  { width: 8px; height: 8px; border-radius: 50%; background: #0F6E56; flex-shrink: 0; margin-top: 3px; }
+.timeline-dot-gray { background: #d6d3d1; }
+.timeline-dot-amber { background: #EF9F27; }
+
+/* ── Driver card (vérification) ── */
+.driver-verify-card { background: #e1f5ee; border: 1.5px solid #1D9E75; border-radius: 10px; padding: 12px; }
+.driver-avatar-lg { width: 44px; height: 44px; border-radius: 50%; background: #0F6E56; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: white; flex-shrink: 0; }
+
+/* ── QR scanner mock ── */
+.scanner-zone { border: 2px dashed #d6d3d1; border-radius: 10px; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: #fafaf9; }
+.scanner-corner { position: absolute; width: 16px; height: 16px; border-color: #0F6E56; border-style: solid; }
+
+/* ── PIN digits ── */
+.pin-digit { width: 32px; height: 40px; background: #fff; border: 0.5px solid #d6d3d1; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: #1c1917; }
+
+/* ── Alert banner ── */
+.alert-banner { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; }
+.alert-banner-red    { background: #fcebeb; border-left: 3px solid #E24B4A; }
+.alert-banner-amber  { background: #faeeda; border-left: 3px solid #EF9F27; }
+.alert-banner-green  { background: #e1f5ee; border-left: 3px solid #1D9E75; }
+
+/* ── Stars ── */
+.stars { color: #BA7517; letter-spacing: 1px; }
+
+/* ── Chart bars ── */
+.chart-bar-wrap { display: flex; align-items: flex-end; gap: 4px; height: 70px; }
+.chart-bar { background: #e1f5ee; border-radius: 3px 3px 0 0; flex: 1; }
+.chart-bar.active { background: #0F6E56; }
+.chart-lbl { font-size: 8px; color: #a8a29e; text-align: center; margin-top: 3px; }
+</style>
+</head>
+<body>
+
+<div class="page-title">Portail Partenaire — SwiftDrop</div>
+<div class="page-sub">Interface web tablette / PC · Next.js + Tailwind CSS</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 1 — Tableau de bord principal
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">1. Tableau de bord — vue principale</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">partenaire.swiftdrop.bj/dashboard</div>
+    <div style="font-size:10px; color:#78716c;">Le Bon Goût · Fidjrossè</div>
+  </div>
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7L7 4.5L9.5 7L8 7L8 9.5L6 9.5L6 7Z" fill="white"/></svg>
+        </div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Partenaire</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link active">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="#0F6E56"/><rect x="8" y="1" width="5" height="5" rx="1" fill="#0F6E56"/><rect x="1" y="8" width="5" height="5" rx="1" fill="#0F6E56"/><rect x="8" y="8" width="5" height="5" rx="1" fill="#0F6E56"/></svg>
+          Tableau de bord
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 7h7M2 11h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Commandes
+          <span class="nav-badge nav-badge-red">2</span>
+        </div>
+        <div class="nav-section">Livraison</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 8h6M4 6h3" stroke="currentColor" stroke-width="1.2"/></svg>
+          Lancer livraison
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M5 7h4M7 5v4" stroke="currentColor" stroke-width="1.2"/></svg>
+          Scanner livreur
+        </div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+          Historique
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Paramètres
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="partner-chip">
+          <div class="partner-avatar">LB</div>
+          <div>
+            <div style="font-size:10px; font-weight:500; color:#1c1917;">Le Bon Goût</div>
+            <div style="font-size:9px; color:#78716c;">Restaurant · Ouvert</div>
+          </div>
+        </div>
+        <div style="margin-top:10px; display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-size:9px; color:#78716c;">Livraisons actives</span>
+          <div class="toggle"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Tableau de bord</div>
+          <div style="font-size:10px; color:#78716c; margin-top:2px;">Mer 29 avr 2026 · 14h32 — Mise à jour en temps réel</div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div style="display:flex; align-items:center; gap:5px; background:#fcebeb; border-radius:20px; padding:4px 10px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#E24B4A;"></div>
+            <span style="font-size:10px; font-weight:500; color:#A32D2D;">2 nouvelles commandes</span>
+          </div>
+          <button class="btn btn-primary" style="font-size:10px; padding:5px 14px;">+ Nouvelle commande</button>
+        </div>
+      </div>
+
+      <!-- Stat cards -->
+      <div class="stat-grid stat-grid-4">
+        <div class="stat-card">
+          <div class="stat-val stat-amber">2</div>
+          <div class="stat-lbl">En préparation</div>
+          <div class="stat-delta delta-up">↑ 1 nouvelle</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val stat-green">3</div>
+          <div class="stat-lbl">Prêtes à livrer</div>
+          <div class="stat-delta" style="color:#854F0B;">En attente livreur</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val stat-blue">4</div>
+          <div class="stat-lbl">En transit</div>
+          <div class="stat-delta delta-up">↑ 2 vs hier</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val stat-green">23</div>
+          <div class="stat-lbl">Livrées aujourd'hui</div>
+          <div class="stat-delta delta-up">↑ 15 % vs hier</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="gap:14px;">
+        <!-- Table commandes -->
+        <div>
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <div class="card-title" style="margin-bottom:0;">Commandes du jour</div>
+              <div style="display:flex; gap:5px;">
+                <button class="btn btn-sm" style="background:#f5f5f4; border-color:#e7e5e4;">Toutes</button>
+                <button class="btn btn-sm btn-amber">En cours</button>
+              </div>
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Réf.</th>
+                  <th>Client</th>
+                  <th>Articles</th>
+                  <th>Statut</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="background:#fdf8f0;">
+                  <td style="font-weight:600; color:#185FA5;">#4831</td>
+                  <td>Kodjo M.</td>
+                  <td style="color:#78716c;">Yassa poulet ×2</td>
+                  <td><span class="badge badge-red">Nouvelle</span></td>
+                  <td><button class="btn btn-sm btn-primary">Accepter</button></td>
+                </tr>
+                <tr style="background:#fdf8f0;">
+                  <td style="font-weight:600; color:#185FA5;">#4830</td>
+                  <td>Afi D.</td>
+                  <td style="color:#78716c;">Menu complet ×1</td>
+                  <td><span class="badge badge-red">Nouvelle</span></td>
+                  <td><button class="btn btn-sm btn-primary">Accepter</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4829</td>
+                  <td>Roméo S.</td>
+                  <td style="color:#78716c;">Poulet braisé ×3</td>
+                  <td><span class="badge badge-amber">Préparation</span></td>
+                  <td><button class="btn btn-sm btn-amber">Marquer prête</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4828</td>
+                  <td>Aminata S.</td>
+                  <td style="color:#78716c;">Jus + Sandwich</td>
+                  <td><span class="badge badge-green">Prête</span></td>
+                  <td><button class="btn btn-sm btn-primary">Lancer livraison</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4827</td>
+                  <td>Jean-Paul D.</td>
+                  <td style="color:#78716c;">Boissons ×4</td>
+                  <td><span class="badge badge-blue">En transit</span></td>
+                  <td><button class="btn btn-sm">Suivre GPS</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4826</td>
+                  <td>Béatrice M.</td>
+                  <td style="color:#78716c;">Menu midi ×2</td>
+                  <td><span class="badge badge-gray" style="background:#e1f5ee;color:#0F6E56;">Livrée ✓</span></td>
+                  <td><button class="btn btn-sm">Détails</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Colonne droite -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+
+          <!-- Mini chart -->
+          <div class="card">
+            <div class="card-title">Livraisons — 7 derniers jours</div>
+            <div style="display:flex; gap:6px;">
+              <div style="flex:1;">
+                <div class="chart-bar-wrap">
+                  <div><div class="chart-bar" style="height:30px;"></div><div class="chart-lbl">L</div></div>
+                  <div><div class="chart-bar" style="height:45px;"></div><div class="chart-lbl">M</div></div>
+                  <div><div class="chart-bar" style="height:38px;"></div><div class="chart-lbl">Me</div></div>
+                  <div><div class="chart-bar" style="height:55px;"></div><div class="chart-lbl">J</div></div>
+                  <div><div class="chart-bar" style="height:28px;"></div><div class="chart-lbl">V</div></div>
+                  <div><div class="chart-bar" style="height:65px;"></div><div class="chart-lbl">S</div></div>
+                  <div><div class="chart-bar active" style="height:50px;"></div><div class="chart-lbl">Auj</div></div>
+                </div>
+              </div>
+              <div style="display:flex; flex-direction:column; justify-content:space-between; padding-bottom:14px;">
+                <div style="text-align:right;">
+                  <div style="font-size:18px; font-weight:700; color:#0F6E56;">23</div>
+                  <div style="font-size:9px; color:#78716c;">Aujourd'hui</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:14px; font-weight:600; color:#1c1917;">189</div>
+                  <div style="font-size:9px; color:#78716c;">Cette semaine</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alertes sonores -->
+          <div class="card">
+            <div class="card-title">Alertes en cours</div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <div class="alert-banner alert-banner-red">
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#A32D2D;">Commande #4831 — Nouvelle commande</div>
+                  <div style="font-size:9px; color:#78716c;">Reçue il y a 2 min · En attente d'acceptation</div>
+                </div>
+                <button class="btn btn-sm btn-primary">Accepter</button>
+              </div>
+              <div class="alert-banner alert-banner-amber">
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#854F0B;">Commande #4829 — Retard préparation</div>
+                  <div style="font-size:9px; color:#78716c;">En préparation depuis 28 min</div>
+                </div>
+                <button class="btn btn-sm btn-amber">Voir</button>
+              </div>
+              <div class="alert-banner alert-banner-green">
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#0F6E56;">Livreur en route — #4827</div>
+                  <div style="font-size:9px; color:#78716c;">Moussa K. · ETA 8 min</div>
+                </div>
+                <button class="btn btn-sm" style="border-color:#9FE1CB; color:#0F6E56;">Suivre</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Statut partenaire -->
+          <div class="card">
+            <div class="card-title">Statut du restaurant</div>
+            <div class="row" style="margin-bottom:8px;">
+              <span class="lbl">Livraisons activées</span>
+              <div class="toggle"></div>
+            </div>
+            <div class="row" style="margin-bottom:8px;">
+              <span class="lbl">Horaire actuel</span>
+              <span class="val">11h00 – 22h00</span>
+            </div>
+            <div class="row">
+              <span class="lbl">Zone de livraison</span>
+              <span class="val">Cotonou · 5 km</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 2 — Lancer une livraison
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">2. Lancer une livraison</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">partenaire.swiftdrop.bj/livraison/lancer</div>
+  </div>
+  <div class="layout">
+
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7L7 4.5L9.5 7L8 7L8 9.5L6 9.5L6 7Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Partenaire</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+          Tableau de bord
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 7h7M2 11h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Commandes
+          <span class="nav-badge">3</span>
+        </div>
+        <div class="nav-section">Livraison</div>
+        <div class="nav-link active">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" fill="#0F6E56"/><path d="M4 8h6M4 6h3" stroke="white" stroke-width="1.2"/></svg>
+          Lancer livraison
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M5 7h4M7 5v4" stroke="currentColor" stroke-width="1.2"/></svg>
+          Scanner livreur
+        </div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+          Historique
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/></svg>
+          Paramètres
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="partner-chip">
+          <div class="partner-avatar">LB</div>
+          <div><div style="font-size:10px; font-weight:500; color:#1c1917;">Le Bon Goût</div><div style="font-size:9px; color:#78716c;">Restaurant · Ouvert</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Lancer une livraison</div>
+          <div style="font-size:10px; color:#78716c; margin-top:2px;">Broadcast immédiat aux livreurs disponibles de la zone</div>
+        </div>
+      </div>
+
+      <div class="two-col" style="gap:16px; align-items:start;">
+
+        <!-- Formulaire -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+
+          <!-- Sélection commande -->
+          <div class="card">
+            <div class="card-title">Commande à livrer</div>
+            <div style="border:1.5px solid #0F6E56; border-radius:8px; padding:10px 12px; background:#f8fefc; margin-bottom:8px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                <div style="font-size:12px; font-weight:600; color:#1c1917;">Commande #4828</div>
+                <span class="badge badge-green">Prête ✓</span>
+              </div>
+              <div style="font-size:10px; color:#78716c; margin-bottom:4px;">Client : Aminata Sow</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <span style="background:#f5f5f4; border-radius:4px; padding:2px 7px; font-size:10px; color:#1c1917;">Jus d'ananas ×2</span>
+                <span style="background:#f5f5f4; border-radius:4px; padding:2px 7px; font-size:10px; color:#1c1917;">Sandwich club ×1</span>
+              </div>
+            </div>
+
+            <!-- Adresse de livraison -->
+            <div style="font-size:10px; color:#78716c; margin-bottom:4px; font-weight:500;">Adresse de livraison</div>
+            <div style="border:0.5px solid #e7e5e4; border-radius:8px; padding:8px 10px; font-size:11px; color:#1c1917; background:#fff; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="5" r="2.5" stroke="#0F6E56" stroke-width="1.2"/><path d="M6 1C4 1 2 2.8 2 5c0 3 4 7 4 7s4-4 4-7c0-2.2-2-4-4-4z" stroke="#0F6E56" stroke-width="1.2" fill="none"/></svg>
+              Rue des Cocotiers, Akpakpa, Cotonou
+            </div>
+
+            <!-- Estimation -->
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:10px;">
+              <div style="text-align:center; background:#f5f5f4; border-radius:7px; padding:7px;">
+                <div style="font-size:13px; font-weight:600; color:#1c1917;">3,2 km</div>
+                <div style="font-size:9px; color:#78716c;">Distance</div>
+              </div>
+              <div style="text-align:center; background:#f5f5f4; border-radius:7px; padding:7px;">
+                <div style="font-size:13px; font-weight:600; color:#1c1917;">~14 min</div>
+                <div style="font-size:9px; color:#78716c;">ETA estimée</div>
+              </div>
+              <div style="text-align:center; background:#e1f5ee; border-radius:7px; padding:7px;">
+                <div style="font-size:13px; font-weight:600; color:#0F6E56;">900 F</div>
+                <div style="font-size:9px; color:#78716c;">Prix livraison</div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" style="width:100%; padding:10px; font-size:12px; font-weight:600; border-radius:8px;">
+              Broadcaster aux livreurs disponibles →
+            </button>
+            <div style="text-align:center; font-size:9px; color:#a8a29e; margin-top:6px;">Le premier livreur qui accepte verrouille la course automatiquement</div>
+          </div>
+
+          <!-- Autres commandes prêtes -->
+          <div class="card">
+            <div class="card-title">Autres commandes prêtes</div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:7px 8px; border:0.5px solid #e7e5e4; border-radius:7px; cursor:pointer;">
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#1c1917;">#4826 — Roméo S.</div>
+                  <div style="font-size:9px; color:#78716c;">Poulet braisé ×3 · Cadjehoun</div>
+                </div>
+                <button class="btn btn-sm btn-primary">Lancer</button>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:7px 8px; border:0.5px solid #e7e5e4; border-radius:7px; cursor:pointer;">
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#1c1917;">#4824 — Flora K.</div>
+                  <div style="font-size:9px; color:#78716c;">Menu midi ×1 · Fidjrossè</div>
+                </div>
+                <button class="btn btn-sm btn-primary">Lancer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colonne droite : carte + livreurs -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="card">
+            <div class="card-title">Zone de livraison — Livreurs disponibles</div>
+            <div class="map-mock" style="height:200px; margin-bottom:10px;">
+              <svg width="100%" height="100%" viewBox="0 0 300 180" style="position:absolute;top:0;left:0;z-index:1;">
+                <path d="M20 150 Q80 120 150 90 Q220 60 280 30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                <path d="M20 90 Q80 110 150 130 Q220 150 280 140" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none"/>
+                <!-- Restaurant (point de départ) -->
+                <rect x="135" y="82" width="30" height="16" rx="3" fill="#0F6E56"/>
+                <text x="150" y="93" text-anchor="middle" font-size="8" fill="white" font-weight="600">Le Bon Goût</text>
+                <!-- Destination -->
+                <circle cx="240" cy="55" r="7" fill="#E24B4A" stroke="white" stroke-width="1.5"/>
+                <text x="240" y="58" text-anchor="middle" font-size="7" fill="white">●</text>
+                <!-- Livreurs disponibles (vert) -->
+                <circle cx="80" cy="130" r="7" fill="#1D9E75" stroke="white" stroke-width="1.5"/>
+                <text x="80" y="134" text-anchor="middle" font-size="8" fill="white">🛵</text>
+                <circle cx="120" cy="60" r="7" fill="#1D9E75" stroke="white" stroke-width="1.5"/>
+                <text x="120" y="64" text-anchor="middle" font-size="8" fill="white">🛵</text>
+                <circle cx="200" cy="100" r="7" fill="#1D9E75" stroke="white" stroke-width="1.5"/>
+                <text x="200" y="104" text-anchor="middle" font-size="8" fill="white">🛵</text>
+                <!-- Livreurs occupés (orange) -->
+                <circle cx="50" cy="70" r="6" fill="#EF9F27" stroke="white" stroke-width="1.5"/>
+                <circle cx="260" cy="130" r="6" fill="#EF9F27" stroke="white" stroke-width="1.5"/>
+              </svg>
+              <div class="map-label">Cotonou · 3 livreurs disponibles</div>
+            </div>
+            <div style="display:flex; gap:10px; font-size:10px; color:#78716c;">
+              <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>Disponible (3)</span>
+              <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#EF9F27;display:inline-block;"></span>En course (2)</span>
+              <span style="display:flex; align-items:center; gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#E24B4A;display:inline-block;"></span>Destination</span>
+            </div>
+          </div>
+
+          <!-- Livreurs proches -->
+          <div class="card">
+            <div class="card-title">Livreurs disponibles à proximité</div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 8px; background:#f9faf9; border-radius:7px; border:0.5px solid #e7e5e4;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <div style="width:28px;height:28px;border-radius:50%;background:#0F6E56;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:white;">MK</div>
+                  <div>
+                    <div style="font-size:10px; font-weight:500; color:#1c1917;">Moussa Kéita</div>
+                    <div style="font-size:9px; color:#78716c;">Moto · 0,8 km · <span class="stars" style="font-size:9px;">★</span> 4.8</div>
+                  </div>
+                </div>
+                <span class="badge badge-green">Dispo</span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 8px; background:#f9faf9; border-radius:7px; border:0.5px solid #e7e5e4;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <div style="width:28px;height:28px;border-radius:50%;background:#0F6E56;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:white;">RT</div>
+                  <div>
+                    <div style="font-size:10px; font-weight:500; color:#1c1917;">Romuald Tokpa</div>
+                    <div style="font-size:9px; color:#78716c;">Moto · 1,4 km · <span class="stars" style="font-size:9px;">★</span> 4.6</div>
+                  </div>
+                </div>
+                <span class="badge badge-green">Dispo</span>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; padding:6px 8px; background:#f9faf9; border-radius:7px; border:0.5px solid #e7e5e4;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <div style="width:28px;height:28px;border-radius:50%;background:#0F6E56;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:white;">AB</div>
+                  <div>
+                    <div style="font-size:10px; font-weight:500; color:#1c1917;">Awa Bio</div>
+                    <div style="font-size:9px; color:#78716c;">Moto · 2,1 km · <span class="stars" style="font-size:9px;">★</span> 4.5</div>
+                  </div>
+                </div>
+                <span class="badge badge-green">Dispo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 3 — Scanner & Vérification livreur
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">3. Scanner &amp; vérification du livreur</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">partenaire.swiftdrop.bj/scanner</div>
+  </div>
+  <div class="layout">
+
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7L7 4.5L9.5 7L8 7L8 9.5L6 9.5L6 7Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Partenaire</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="1" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="1" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/><rect x="8" y="8" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+          Tableau de bord
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 7h7M2 11h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Commandes
+        </div>
+        <div class="nav-section">Livraison</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 8h6M4 6h3" stroke="currentColor" stroke-width="1.2"/></svg>
+          Lancer livraison
+        </div>
+        <div class="nav-link active">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" fill="#0F6E56"/><path d="M5 7h4M7 5v4" stroke="white" stroke-width="1.2"/></svg>
+          Scanner livreur
+        </div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+          Historique
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="partner-chip">
+          <div class="partner-avatar">LB</div>
+          <div><div style="font-size:10px; font-weight:500; color:#1c1917;">Le Bon Goût</div><div style="font-size:9px; color:#78716c;">Restaurant · Ouvert</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Vérification du livreur</div>
+          <div style="font-size:10px; color:#78716c; margin-top:2px;">Commande #4828 — Scanner le QR ou saisir le PIN avant de remettre le colis</div>
+        </div>
+        <div style="background:#faeeda; border-radius:20px; padding:4px 10px; font-size:10px; font-weight:500; color:#854F0B;">
+          En attente de vérification
+        </div>
+      </div>
+
+      <div class="two-col" style="gap:16px; align-items:start;">
+
+        <!-- Panneau scanner -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+
+          <!-- Scanner QR -->
+          <div class="card">
+            <div class="card-title">Scanner le QR code du livreur</div>
+            <div class="scanner-zone" style="position:relative; margin-bottom:10px;">
+              <!-- Coins du scanner -->
+              <div style="position:absolute; top:10px; left:10px; width:18px; height:18px; border-top:2.5px solid #0F6E56; border-left:2.5px solid #0F6E56; border-radius:2px 0 0 0;"></div>
+              <div style="position:absolute; top:10px; right:10px; width:18px; height:18px; border-top:2.5px solid #0F6E56; border-right:2.5px solid #0F6E56; border-radius:0 2px 0 0;"></div>
+              <div style="position:absolute; bottom:10px; left:10px; width:18px; height:18px; border-bottom:2.5px solid #0F6E56; border-left:2.5px solid #0F6E56; border-radius:0 0 0 2px;"></div>
+              <div style="position:absolute; bottom:10px; right:10px; width:18px; height:18px; border-bottom:2.5px solid #0F6E56; border-right:2.5px solid #0F6E56; border-radius:0 0 2px 0;"></div>
+              <!-- Ligne de scan -->
+              <div style="position:absolute; top:50%; left:14px; right:14px; height:1.5px; background:linear-gradient(to right, transparent, #1D9E75, transparent);"></div>
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" style="opacity:0.25;">
+                <rect x="2" y="2" width="14" height="14" rx="2" stroke="#0F6E56" stroke-width="2"/>
+                <rect x="24" y="2" width="14" height="14" rx="2" stroke="#0F6E56" stroke-width="2"/>
+                <rect x="2" y="24" width="14" height="14" rx="2" stroke="#0F6E56" stroke-width="2"/>
+                <rect x="5" y="5" width="8" height="8" fill="#0F6E56"/>
+                <rect x="27" y="5" width="8" height="8" fill="#0F6E56"/>
+                <rect x="5" y="27" width="8" height="8" fill="#0F6E56"/>
+                <rect x="27" y="27" width="4" height="4" fill="#0F6E56"/>
+                <rect x="33" y="27" width="4" height="4" fill="#0F6E56"/>
+                <rect x="27" y="33" width="4" height="4" fill="#0F6E56"/>
+                <rect x="33" y="33" width="4" height="4" fill="#0F6E56"/>
+              </svg>
+              <div style="font-size:10px; color:#a8a29e; margin-top:4px;">Pointer la caméra vers le QR du livreur</div>
+            </div>
+            <div style="text-align:center; font-size:10px; color:#78716c; margin-bottom:10px;">— ou —</div>
+
+            <!-- Saisie PIN -->
+            <div style="font-size:10px; font-weight:500; color:#78716c; margin-bottom:6px;">Saisir le code PIN à 6 chiffres</div>
+            <div style="display:flex; gap:6px; justify-content:center; margin-bottom:10px;">
+              <div class="pin-digit">4</div>
+              <div class="pin-digit">8</div>
+              <div class="pin-digit">2</div>
+              <div class="pin-digit">1</div>
+              <div class="pin-digit">9</div>
+              <div class="pin-digit">6</div>
+            </div>
+            <button class="btn btn-primary" style="width:100%; padding:8px; font-size:11px; font-weight:500; border-radius:8px;">Valider le code PIN</button>
+          </div>
+
+          <!-- Commande concernée -->
+          <div class="card">
+            <div class="card-title">Commande concernée</div>
+            <div class="row" style="margin-bottom:5px;"><span class="lbl">Référence</span><span class="val" style="color:#185FA5;">#4828</span></div>
+            <div class="row" style="margin-bottom:5px;"><span class="lbl">Client destinataire</span><span class="val">Aminata Sow</span></div>
+            <div class="row" style="margin-bottom:5px;"><span class="lbl">Articles</span><span class="val">Jus ×2 · Sandwich ×1</span></div>
+            <div class="row"><span class="lbl">Adresse de livraison</span><span class="val" style="font-size:10px;">Akpakpa, Cotonou</span></div>
+          </div>
+        </div>
+
+        <!-- Fiche livreur — résultat vérification -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+
+          <!-- Fiche vérifiée -->
+          <div class="card" style="border:1.5px solid #1D9E75;">
+            <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:#1D9E75;"></div>
+              <div class="card-title" style="margin-bottom:0; color:#0F6E56;">Livreur vérifié — PIN correct</div>
+            </div>
+
+            <div class="driver-verify-card" style="margin-bottom:10px;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <!-- Photo KYC simulée -->
+                <div style="width:56px; height:56px; border-radius:10px; background:#0F6E56; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; color:white; flex-shrink:0; border:2px solid #fff; box-shadow:0 0 0 1.5px #1D9E75;">MK</div>
+                <div>
+                  <div style="font-size:13px; font-weight:700; color:#0F6E56; margin-bottom:2px;">Moussa Kéita</div>
+                  <div style="font-size:10px; color:#78716c; margin-bottom:3px;">+229 97 34 XX XX · Moto Honda CB 125</div>
+                  <div style="display:flex; align-items:center; gap:5px;">
+                    <span class="stars" style="font-size:12px;">★★★★★</span>
+                    <span style="font-size:10px; color:#78716c;">4,8 / 5 · 124 courses</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instructions visuelles -->
+            <div style="background:#f8fefc; border-radius:8px; padding:10px; margin-bottom:10px;">
+              <div style="font-size:10px; font-weight:600; color:#1c1917; margin-bottom:6px;">Vérification visuelle obligatoire</div>
+              <div style="display:flex; flex-direction:column; gap:5px;">
+                <div style="display:flex; align-items:center; gap:7px; font-size:10px; color:#1c1917;">
+                  <div style="width:18px;height:18px;border-radius:50%;background:#e1f5ee;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </div>
+                  La photo correspond à la personne en face de vous ?
+                </div>
+                <div style="display:flex; align-items:center; gap:7px; font-size:10px; color:#1c1917;">
+                  <div style="width:18px;height:18px;border-radius:50%;background:#e1f5ee;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </div>
+                  Le nom correspond bien : Moussa Kéita ?
+                </div>
+                <div style="display:flex; align-items:center; gap:7px; font-size:10px; color:#1c1917;">
+                  <div style="width:18px;height:18px;border-radius:50%;background:#e1f5ee;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </div>
+                  La commande #4828 est bien celle qu'il vient chercher ?
+                </div>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" style="width:100%; padding:10px; font-size:12px; font-weight:600; border-radius:8px; margin-bottom:8px;">
+              Confirmer la remise du colis
+            </button>
+            <button class="btn btn-danger" style="width:100%; padding:8px; font-size:11px; border-radius:8px;">
+              Signaler un problème — Livreur non conforme
+            </button>
+          </div>
+
+          <!-- Cas de refus -->
+          <div class="card" style="border:0.5px solid #e7e5e4;">
+            <div class="card-title" style="color:#A32D2D;">En cas de doute ou de refus</div>
+            <div style="display:flex; flex-direction:column; gap:5px; font-size:10px; color:#78716c; line-height:1.5;">
+              <div style="display:flex; gap:6px;"><span style="color:#A32D2D; font-weight:600;">1.</span> Refusez la remise du colis.</div>
+              <div style="display:flex; gap:6px;"><span style="color:#A32D2D; font-weight:600;">2.</span> Cliquez sur "Signaler un problème".</div>
+              <div style="display:flex; gap:6px;"><span style="color:#A32D2D; font-weight:600;">3.</span> L'administrateur est alerté immédiatement.</div>
+              <div style="display:flex; gap:6px;"><span style="color:#A32D2D; font-weight:600;">4.</span> Un nouveau livreur sera assigné automatiquement.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ÉCRAN 4 — Suivi GPS & Historique
+═══════════════════════════════════════════════════ -->
+<div class="section-tag">4. Suivi en temps réel &amp; historique</div>
+<div class="browser-frame">
+  <div class="browser-bar">
+    <div class="browser-dots"><div class="browser-dot"></div><div class="browser-dot"></div><div class="browser-dot"></div></div>
+    <div class="browser-url">partenaire.swiftdrop.bj/suivi/4828</div>
+  </div>
+  <div class="layout">
+
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="white" stroke-width="1.5"/><path d="M4.5 7L7 4.5L9.5 7L8 7L8 9.5L6 9.5L6 7Z" fill="white"/></svg></div>
+        <div><div class="logo-text">SwiftDrop</div><div class="logo-sub">Partenaire</div></div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-section">Principal</div>
+        <div class="nav-link active">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="#0F6E56"/><rect x="8" y="1" width="5" height="5" rx="1" fill="#0F6E56"/><rect x="1" y="8" width="5" height="5" rx="1" fill="#0F6E56"/><rect x="8" y="8" width="5" height="5" rx="1" fill="#0F6E56"/></svg>
+          Tableau de bord
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 7h7M2 11h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Commandes
+        </div>
+        <div class="nav-section">Livraison</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/></svg>
+          Lancer livraison
+        </div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/></svg>
+          Scanner livreur
+        </div>
+        <div class="nav-section">Gestion</div>
+        <div class="nav-link">
+          <svg viewBox="0 0 14 14" fill="none"><circle cx="7" cy="5" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M1 13c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+          Historique
+        </div>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="partner-chip">
+          <div class="partner-avatar">LB</div>
+          <div><div style="font-size:10px; font-weight:500; color:#1c1917;">Le Bon Goût</div><div style="font-size:9px; color:#78716c;">Restaurant · Ouvert</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <div class="content-header">
+        <div>
+          <div class="content-title">Suivi — Commande #4828</div>
+          <div style="font-size:10px; color:#78716c; margin-top:2px;">Livreur : Moussa Kéita · Mise à jour GPS toutes les 15 secondes</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:5px; background:#e1f5ee; border-radius:20px; padding:4px 10px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#1D9E75;"></div>
+          <span style="font-size:10px; font-weight:500; color:#0F6E56;">IN_TRANSIT</span>
+        </div>
+      </div>
+
+      <div class="two-col" style="gap:16px; align-items:start;">
+
+        <!-- Carte + stats -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <div class="card-title" style="margin-bottom:0;">Position en temps réel</div>
+              <div style="display:flex; align-items:center; gap:4px; font-size:9px; color:#0F6E56; background:#e1f5ee; padding:2px 7px; border-radius:10px;">
+                <div style="width:5px;height:5px;border-radius:50%;background:#1D9E75;"></div>
+                En direct
+              </div>
+            </div>
+            <div class="map-mock" style="height:220px; margin-bottom:10px;">
+              <svg width="100%" height="100%" viewBox="0 0 300 200" style="position:absolute;top:0;left:0;z-index:1;">
+                <path d="M30 170 Q90 140 150 100 Q200 70 260 30" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none"/>
+                <!-- Trajet parcouru -->
+                <path d="M30 170 Q90 140 140 110" stroke="white" stroke-width="2.5" fill="none"/>
+                <!-- Trajet restant -->
+                <path d="M140 110 Q200 70 260 30" stroke="rgba(255,255,255,0.35)" stroke-width="1.5" stroke-dasharray="5,4" fill="none"/>
+                <!-- Départ (restaurant) -->
+                <circle cx="30" cy="170" r="7" fill="#0F6E56" stroke="white" stroke-width="1.5"/>
+                <text x="30" y="173" text-anchor="middle" font-size="8" fill="white">R</text>
+                <!-- Destination client -->
+                <circle cx="260" cy="30" r="7" fill="#E24B4A" stroke="white" stroke-width="1.5"/>
+                <text x="260" y="33" text-anchor="middle" font-size="7" fill="white">C</text>
+                <!-- Position livreur -->
+                <circle cx="140" cy="110" r="10" fill="#EF9F27" stroke="white" stroke-width="2"/>
+                <text x="140" y="114" text-anchor="middle" font-size="9" fill="white">🛵</text>
+                <!-- ETA bubble -->
+                <rect x="148" y="98" width="36" height="16" rx="3" fill="white" fill-opacity="0.95"/>
+                <text x="166" y="109" text-anchor="middle" font-size="8" fill="#1c1917" font-weight="600">8 min</text>
+              </svg>
+              <div class="map-label">Cotonou · GPS actif</div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+              <div style="text-align:center; background:#e1f5ee; border-radius:8px; padding:8px;">
+                <div style="font-size:16px; font-weight:700; color:#0F6E56;">8</div>
+                <div style="font-size:9px; color:#78716c;">min restantes</div>
+              </div>
+              <div style="text-align:center; background:#f5f5f4; border-radius:8px; padding:8px;">
+                <div style="font-size:16px; font-weight:700; color:#1c1917;">2,1</div>
+                <div style="font-size:9px; color:#78716c;">km restants</div>
+              </div>
+              <div style="text-align:center; background:#f5f5f4; border-radius:8px; padding:8px;">
+                <div style="font-size:16px; font-weight:700; color:#1c1917;">14h48</div>
+                <div style="font-size:9px; color:#78716c;">Arrivée estimée</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historique des livraisons du jour -->
+          <div class="card">
+            <div class="card-title">Historique du jour</div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Réf.</th>
+                  <th>Client</th>
+                  <th>Statut</th>
+                  <th>Heure</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4825</td>
+                  <td>Flora K.</td>
+                  <td><span class="badge" style="background:#e1f5ee;color:#0F6E56;">Livrée ✓</span></td>
+                  <td style="color:#78716c; font-size:10px;">11:14</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4824</td>
+                  <td>Cédric M.</td>
+                  <td><span class="badge" style="background:#e1f5ee;color:#0F6E56;">Livrée ✓</span></td>
+                  <td style="color:#78716c; font-size:10px;">11:52</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4823</td>
+                  <td>Rachelle A.</td>
+                  <td><span class="badge" style="background:#e1f5ee;color:#0F6E56;">Livrée ✓</span></td>
+                  <td style="color:#78716c; font-size:10px;">13:07</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4822</td>
+                  <td>Ibrahim S.</td>
+                  <td><span class="badge badge-red">Annulée</span></td>
+                  <td style="color:#78716c; font-size:10px;">13:44</td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600; color:#185FA5;">#4828</td>
+                  <td>Aminata S.</td>
+                  <td><span class="badge badge-blue">En transit</span></td>
+                  <td style="color:#78716c; font-size:10px;">14:32</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Timeline + récap -->
+        <div style="display:flex; flex-direction:column; gap:12px;">
+
+          <!-- Timeline statuts -->
+          <div class="card">
+            <div class="card-title">Timeline — Commande #4828</div>
+            <div style="display:flex; flex-direction:column; position:relative; padding-left:20px;">
+              <div style="position:absolute; left:7px; top:12px; bottom:12px; width:1.5px; background:#e7e5e4;"></div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot" style="position:absolute; left:3px; margin-top:3px;"></div>
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#1c1917;">Commande créée &amp; payée</div>
+                  <div style="font-size:9px; color:#78716c;">14:10 · Client : Aminata Sow</div>
+                </div>
+              </div>
+              <div class="timeline-item" style="margin-top:4px;">
+                <div class="timeline-dot" style="position:absolute; left:3px; margin-top:3px;"></div>
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#1c1917;">Commande marquée PRÊTE</div>
+                  <div style="font-size:9px; color:#78716c;">14:25 · Par le partenaire</div>
+                </div>
+              </div>
+              <div class="timeline-item" style="margin-top:4px;">
+                <div class="timeline-dot" style="position:absolute; left:3px; margin-top:3px;"></div>
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#1c1917;">Livraison broadcastée</div>
+                  <div style="font-size:9px; color:#78716c;">14:25 · 3 livreurs notifiés</div>
+                </div>
+              </div>
+              <div class="timeline-item" style="margin-top:4px;">
+                <div class="timeline-dot" style="position:absolute; left:3px; margin-top:3px;"></div>
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#1c1917;">Moussa Kéita accepte</div>
+                  <div style="font-size:9px; color:#78716c;">14:27 · Verrouillage atomique · PIN/QR générés</div>
+                </div>
+              </div>
+              <div class="timeline-item" style="margin-top:4px;">
+                <div class="timeline-dot" style="position:absolute; left:3px; margin-top:3px;"></div>
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#1c1917;">Vérification PIN réussie</div>
+                  <div style="font-size:9px; color:#78716c;">14:32 · Colis remis au livreur</div>
+                </div>
+              </div>
+              <div class="timeline-item" style="margin-top:4px;">
+                <div class="timeline-dot timeline-dot-amber" style="position:absolute; left:3px; margin-top:3px;"></div>
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#854F0B;">En transit vers le client</div>
+                  <div style="font-size:9px; color:#78716c;">14:32 → maintenant · GPS actif</div>
+                </div>
+              </div>
+              <div class="timeline-item" style="margin-top:4px; opacity:0.4;">
+                <div class="timeline-dot timeline-dot-gray" style="position:absolute; left:3px; margin-top:3px;"></div>
+                <div>
+                  <div style="font-size:10px; font-weight:500; color:#78716c;">Confirmation client attendue</div>
+                  <div style="font-size:9px; color:#a8a29e;">À venir · ETA 14h48</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Récapitulatif financier -->
+          <div class="card">
+            <div class="card-title">Récapitulatif financier</div>
+            <div class="row" style="margin-bottom:5px;"><span class="lbl">Prix de livraison payé</span><span class="val">900 FCFA</span></div>
+            <div class="row" style="margin-bottom:5px;"><span class="lbl">Commission SwiftDrop (15 %)</span><span class="val" style="color:#854F0B;">135 FCFA</span></div>
+            <div class="row" style="margin-bottom:5px;"><span class="lbl">Part livreur (85 %)</span><span class="val" style="color:#0F6E56;">765 FCFA</span></div>
+            <div class="sep"></div>
+            <div class="row"><span class="lbl" style="font-weight:500; color:#1c1917;">Paiement client</span><span class="val" style="color:#0F6E56;">Validé — Mobile Money</span></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

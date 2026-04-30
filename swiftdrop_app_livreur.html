@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftDrop — App Livreur</title>
+<style>
+:root {
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f5f5f4;
+  --color-text-primary: #1c1917;
+  --color-text-secondary: #78716c;
+  --color-border-secondary: #d6d3d1;
+  --color-border-tertiary: #e7e5e4;
+  --font-sans: 'Segoe UI', system-ui, sans-serif;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --green: #0F6E56;
+  --green-mid: #1D9E75;
+  --green-light: #E1F5EE;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: #f0faf6; padding: 32px; }
+
+.page-title { font-size: 15px; font-weight: 600; color: #1c1917; margin-bottom: 6px; }
+.page-sub { font-size: 12px; color: #78716c; margin-bottom: 28px; }
+.section-tag { display: inline-block; font-size: 12px; font-weight: 500; color: #0F6E56; margin-bottom: 16px; border-bottom: 2px solid #0F6E56; padding-bottom: 3px; }
+
+/* ── Phone frame ── */
+.phones-row { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 48px; align-items: flex-start; }
+
+.phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.phone-label { font-size: 11px; font-weight: 500; color: #0F6E56; letter-spacing: 0.02em; }
+
+.phone {
+  width: 240px;
+  background: #1c1917;
+  border-radius: 36px;
+  padding: 10px;
+  box-shadow: 0 0 0 1px #333, 0 20px 40px rgba(0,0,0,0.18);
+  position: relative;
+}
+.phone-notch {
+  width: 70px; height: 20px;
+  background: #1c1917;
+  border-radius: 0 0 14px 14px;
+  margin: 0 auto 0;
+  position: relative;
+  z-index: 10;
+}
+.phone-notch::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  background: #2a2a2a;
+  border-radius: 50%;
+  top: 5px; left: 50%; transform: translateX(-50%);
+}
+.phone-screen {
+  background: var(--color-background-primary);
+  border-radius: 28px;
+  overflow: hidden;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+}
+.phone-btn-right {
+  position: absolute;
+  right: -3px; top: 80px;
+  width: 3px; height: 30px;
+  background: #333;
+  border-radius: 0 2px 2px 0;
+}
+.phone-btn-left-1 {
+  position: absolute;
+  left: -3px; top: 70px;
+  width: 3px; height: 22px;
+  background: #333;
+  border-radius: 2px 0 0 2px;
+}
+.phone-btn-left-2 {
+  position: absolute;
+  left: -3px; top: 100px;
+  width: 3px; height: 36px;
+  background: #333;
+  border-radius: 2px 0 0 2px;
+}
+.phone-btn-left-3 {
+  position: absolute;
+  left: -3px; top: 144px;
+  width: 3px; height: 36px;
+  background: #333;
+  border-radius: 2px 0 0 2px;
+}
+
+/* ── Status bar ── */
+.status-bar {
+  background: var(--green);
+  padding: 8px 14px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.status-time { font-size: 11px; font-weight: 600; color: #fff; }
+.status-icons { display: flex; gap: 5px; align-items: center; }
+.status-icons svg { width: 12px; height: 12px; }
+
+/* ── Top bar ── */
+.top-bar {
+  padding: 10px 14px 8px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+.top-bar-title { font-size: 13px; font-weight: 600; color: var(--color-text-primary); }
+
+/* ── Badges ── */
+.badge { display: inline-flex; align-items: center; border-radius: 20px; font-size: 9px; font-weight: 600; padding: 2px 7px; }
+.badge-green { background: #E1F5EE; color: #0F6E56; }
+.badge-amber { background: #FAEEDA; color: #854F0B; }
+.badge-blue  { background: #E6F1FB; color: #185FA5; }
+.badge-red   { background: #FCEBEB; color: #A32D2D; }
+.badge-gray  { background: #f5f5f4; color: #78716c; }
+
+/* ── Buttons ── */
+.btn { border: 0.5px solid var(--color-border-secondary); border-radius: 7px; background: #fff; color: var(--color-text-primary); font-size: 10px; padding: 5px 10px; cursor: pointer; font-family: var(--font-sans); }
+.btn-primary { background: var(--green); border-color: var(--green); color: white; }
+.btn-outline { background: transparent; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); }
+.btn-block { width: 100%; padding: 9px; font-size: 11px; font-weight: 500; border-radius: 10px; }
+.btn-danger-outline { background: #FCEBEB; border-color: #F09595; color: #A32D2D; }
+
+/* ── Nav bar ── */
+.nav-bar {
+  display: flex;
+  justify-content: space-around;
+  padding: 9px 0 10px;
+  border-top: 0.5px solid var(--color-border-tertiary);
+  background: #fff;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.nav-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9px; color: var(--color-text-secondary); }
+.nav-item.active { color: var(--green); }
+.nav-item svg { width: 16px; height: 16px; }
+
+/* ── Section label ── */
+.section-inner { font-size: 9px; font-weight: 600; color: #a8a29e; letter-spacing: 0.06em; text-transform: uppercase; padding: 6px 14px 2px; }
+
+/* ── Cards ── */
+.course-card {
+  margin: 6px 10px;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+.course-card.new-card {
+  border-color: var(--green-mid);
+  background: #f8fefc;
+}
+
+/* Route dots */
+.route-line { display: flex; flex-direction: column; gap: 2px; padding: 5px 0; }
+.route-item { display: flex; align-items: center; gap: 7px; font-size: 10px; color: var(--color-text-primary); }
+.rdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.rdot-green { background: var(--green-mid); }
+.rdot-red { background: #E24B4A; }
+.rconnector { width: 1px; height: 8px; background: var(--color-border-tertiary); margin-left: 3px; }
+
+/* Wallet */
+.wallet-card {
+  margin: 10px;
+  background: var(--green);
+  border-radius: 12px;
+  padding: 14px;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.wallet-card::before {
+  content: '';
+  position: absolute;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 50%;
+  top: -30px; right: -20px;
+}
+.wallet-label { font-size: 10px; opacity: 0.75; margin-bottom: 3px; }
+.wallet-amount { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; }
+.wallet-fcfa { font-size: 12px; font-weight: 400; opacity: 0.8; }
+.wallet-row { display: flex; justify-content: space-between; margin-top: 10px; }
+.wallet-mini { font-size: 9px; opacity: 0.7; }
+.wallet-mini-val { font-size: 10px; font-weight: 600; }
+
+/* History rows */
+.hist-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.hist-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+.hist-icon-green { background: var(--green-light); }
+.hist-icon-red { background: #FCEBEB; }
+.hist-left { display: flex; align-items: center; }
+.hist-name { font-size: 11px; font-weight: 500; color: var(--color-text-primary); }
+.hist-date { font-size: 9px; color: var(--color-text-secondary); margin-top: 1px; }
+.hist-amount-pos { font-size: 12px; font-weight: 600; color: #0F6E56; }
+.hist-amount-neg { font-size: 12px; font-weight: 600; color: #A32D2D; }
+
+/* QR zone */
+.qr-zone {
+  margin: 8px 12px;
+  background: #f8fefc;
+  border: 0.5px solid var(--green-mid);
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+.pin-row { display: flex; gap: 5px; justify-content: center; margin: 8px 0; }
+.pin-digit {
+  width: 28px; height: 36px;
+  background: #fff;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* KYC form */
+.field {
+  margin: 5px 12px;
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  background: #f9f9f9;
+}
+.upload-zone {
+  margin: 5px 12px;
+  border: 0.5px dashed var(--color-border-secondary);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  font-size: 10px;
+  color: var(--color-text-secondary);
+  background: #fafaf9;
+}
+.upload-icon {
+  width: 28px; height: 28px;
+  background: var(--green-light);
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 5px;
+}
+
+/* Map mock */
+.map-mock {
+  background: linear-gradient(135deg, #c8e6c9, #a5d6a7);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  height: 120px;
+  margin: 0 12px 8px;
+}
+.map-mock::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 12px, rgba(255,255,255,0.18) 12px, rgba(255,255,255,0.18) 13px),
+              repeating-linear-gradient(90deg, transparent, transparent 12px, rgba(255,255,255,0.18) 12px, rgba(255,255,255,0.18) 13px);
+}
+.map-label { position: absolute; bottom: 5px; right: 7px; background: rgba(255,255,255,0.9); border-radius: 4px; padding: 2px 6px; font-size: 9px; color: #333; }
+
+/* Profile */
+.profile-avatar {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 600; color: #fff;
+  margin: 0 auto 6px;
+}
+.stars { color: #BA7517; font-size: 11px; letter-spacing: 1px; }
+
+.sep { height: 0.5px; background: var(--color-border-tertiary); margin: 6px 0; }
+.row-info { display: flex; justify-content: space-between; padding: 5px 14px; }
+.row-lbl { font-size: 10px; color: var(--color-text-secondary); }
+.row-val { font-size: 10px; font-weight: 500; color: var(--color-text-primary); }
+
+.scroll-area { overflow-y: auto; flex: 1; }
+
+.info-chip {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 9px; color: var(--color-text-secondary);
+}
+.dot-pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green-mid);
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="page-title">Application Livreur — SwiftDrop</div>
+<div class="page-sub">Interface mobile iOS / Android · React Native + Expo</div>
+
+<!-- ===== ÉCRAN 1 : Inscription KYC ===== -->
+<div class="section-tag">1. Inscription &amp; KYC</div>
+<div class="phones-row">
+
+  <div class="phone-wrap">
+    <div class="phone-label">Inscription</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="4" width="2" height="7" rx="0.5" fill="white"/><rect x="4.5" y="2.5" width="2" height="8.5" rx="0.5" fill="white"/><rect x="8" y="1" width="2" height="10" rx="0.5" fill="white"/></svg>
+            <svg viewBox="0 0 12 12" fill="none"><path d="M6 2.5 Q9.5 5 6 9.5 Q2.5 5 6 2.5Z" fill="white"/></svg>
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">Devenir livreur</span>
+          <span class="badge badge-amber">Étape 1/3</span>
+        </div>
+        <div class="scroll-area" style="padding: 6px 0 10px;">
+          <div class="section-inner">Informations personnelles</div>
+          <div class="field">Nom complet</div>
+          <div class="field">Numéro de téléphone</div>
+          <div class="field">Adresse (quartier)</div>
+          <div class="field">Type de véhicule ▾  &nbsp;<span style="color:#0F6E56;font-weight:500;">Moto</span></div>
+          <div class="section-inner" style="margin-top:6px;">Documents requis</div>
+          <div class="upload-zone">
+            <div class="upload-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="#0F6E56" stroke-width="1.2"/><path d="M4 7h6M7 4v6" stroke="#0F6E56" stroke-width="1.2"/></svg>
+            </div>
+            Pièce d'identité — recto
+          </div>
+          <div class="upload-zone">
+            <div class="upload-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="2" width="12" height="10" rx="1.5" stroke="#0F6E56" stroke-width="1.2"/><path d="M4 7h6M7 4v6" stroke="#0F6E56" stroke-width="1.2"/></svg>
+            </div>
+            Pièce d'identité — verso
+          </div>
+          <div class="upload-zone">
+            <div class="upload-icon">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="#0F6E56" stroke-width="1.2"/><circle cx="7" cy="7" r="1.5" fill="#0F6E56"/></svg>
+            </div>
+            Photo du véhicule
+          </div>
+          <div style="margin: 10px 12px 0;">
+            <button class="btn btn-primary btn-block">Continuer →</button>
+          </div>
+          <div style="text-align:center; font-size:9px; color: #a8a29e; margin-top: 6px; padding: 0 14px;">Validation manuelle sous 24h par l'administrateur</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Validation en attente -->
+  <div class="phone-wrap">
+    <div class="phone-label">En attente de validation</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="4" width="2" height="7" rx="0.5" fill="white"/><rect x="4.5" y="2.5" width="2" height="8.5" rx="0.5" fill="white"/><rect x="8" y="1" width="2" height="10" rx="0.5" fill="white"/></svg>
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">SwiftDrop</span>
+        </div>
+        <div class="scroll-area" style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding: 20px 14px; text-align:center;">
+          <div style="width:56px; height:56px; border-radius:50%; background:#FAEEDA; display:flex; align-items:center; justify-content:center; margin-bottom:12px;">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="11" stroke="#BA7517" stroke-width="1.5"/><path d="M14 8v6l4 2" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div style="font-size:13px; font-weight:600; color:#1c1917; margin-bottom:6px;">Dossier en cours de vérification</div>
+          <div style="font-size:10px; color:#78716c; line-height:1.5; margin-bottom:16px;">Votre dossier KYC a bien été reçu. L'administrateur le validera sous 24 heures.</div>
+          <div style="background:#E1F5EE; border-radius:8px; padding:10px 12px; width:100%; text-align:left; margin-bottom:10px;">
+            <div style="font-size:9px; color:#0F6E56; font-weight:600; margin-bottom:4px;">Documents soumis</div>
+            <div style="display:flex; align-items:center; gap:5px; font-size:10px; color:#1c1917; margin-bottom:2px;">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#1D9E75"/><path d="M3 5l1.5 1.5L7 3.5" stroke="white" stroke-width="1"/></svg>
+              Pièce d'identité recto/verso
+            </div>
+            <div style="display:flex; align-items:center; gap:5px; font-size:10px; color:#1c1917;">
+              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" fill="#1D9E75"/><path d="M3 5l1.5 1.5L7 3.5" stroke="white" stroke-width="1"/></svg>
+              Photo du véhicule
+            </div>
+          </div>
+          <button class="btn btn-outline btn-block" style="font-size:10px;">Contacter le support</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ÉCRAN 2 : Courses disponibles ===== -->
+<div class="section-tag">2. Courses disponibles</div>
+<div class="phones-row">
+
+  <div class="phone-wrap">
+    <div class="phone-label">Liste des courses</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <div class="info-chip"><div class="dot-pulse"></div><span style="color:rgba(255,255,255,0.85);font-size:9px;">En ligne</span></div>
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">Courses disponibles</span>
+          <span class="badge badge-green">3 dispo</span>
+        </div>
+        <div class="section-inner">Cotonou · Akpakpa &amp; environs</div>
+        <div class="scroll-area">
+
+          <div class="course-card new-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span class="badge badge-blue">Restaurant</span>
+              <span style="font-size:14px; font-weight:700; color:#0F6E56;">+1 020 FCFA</span>
+            </div>
+            <div class="route-line">
+              <div class="route-item"><div class="rdot rdot-green"></div>Le Bon Goût, Fidjrossè</div>
+              <div class="rconnector"></div>
+              <div class="route-item"><div class="rdot rdot-red"></div>Immeuble Sèmè, Cotonou</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin: 4px 0 7px;">
+              <span style="font-size:9px; color:#78716c;">4,1 km · ~18 min</span>
+              <span style="font-size:9px; color:#78716c;">Prix client : 1 200 FCFA</span>
+            </div>
+            <button class="btn btn-primary btn-block" style="font-size:11px;">Accepter la course</button>
+          </div>
+
+          <div class="course-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span class="badge badge-amber">Colis léger</span>
+              <span style="font-size:14px; font-weight:700; color:#0F6E56;">+722 FCFA</span>
+            </div>
+            <div class="route-line">
+              <div class="route-item"><div class="rdot rdot-green"></div>Pharmacie Centrale, Akpakpa</div>
+              <div class="rconnector"></div>
+              <div class="route-item"><div class="rdot rdot-red"></div>Rue 12.421, Cadjehoun</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin: 4px 0 7px;">
+              <span style="font-size:9px; color:#78716c;">2,3 km · ~12 min</span>
+              <span style="font-size:9px; color:#78716c;">Prix client : 850 FCFA</span>
+            </div>
+            <button class="btn btn-primary btn-block" style="font-size:11px;">Accepter la course</button>
+          </div>
+
+          <div class="course-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span class="badge badge-gray">Supermarché</span>
+              <span style="font-size:14px; font-weight:700; color:#0F6E56;">+1 615 FCFA</span>
+            </div>
+            <div class="route-line">
+              <div class="route-item"><div class="rdot rdot-green"></div>TopMarché, Zone Industrielle</div>
+              <div class="rconnector"></div>
+              <div class="route-item"><div class="rdot rdot-red"></div>Agla, Cotonou</div>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin: 4px 0 7px;">
+              <span style="font-size:9px; color:#78716c;">6,2 km · ~27 min</span>
+              <span style="font-size:9px; color:#78716c;">Prix client : 1 900 FCFA</span>
+            </div>
+            <button class="btn btn-primary btn-block" style="font-size:11px;">Accepter la course</button>
+          </div>
+          <div style="height:10px;"></div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item active">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="8" width="5" height="7" rx="1" fill="#0F6E56"/><rect x="8" y="4" width="5" height="11" rx="1" fill="#0F6E56"/><rect x="1" y="1" width="5" height="5" rx="1" stroke="#0F6E56" stroke-width="1.2"/></svg>
+            Courses
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+            Profil
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.2"/></svg>
+            Wallet
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course acceptée -->
+  <div class="phone-wrap">
+    <div class="phone-label">Course acceptée</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">Course #4821</span>
+          <span class="badge badge-green">Assignée</span>
+        </div>
+        <div class="scroll-area" style="padding-top:4px;">
+          <div style="background:#E1F5EE; border-left: 3px solid #1D9E75; margin: 6px 12px; border-radius: 0 8px 8px 0; padding: 8px 10px;">
+            <div style="font-size:10px; font-weight:600; color:#0F6E56;">Course verrouillée pour vous</div>
+            <div style="font-size:9px; color:#1D9E75; margin-top:1px;">Rendez-vous au point de collecte</div>
+          </div>
+          <div class="map-mock">
+            <svg width="100%" height="100%" viewBox="0 0 200 110" style="position:absolute;top:0;left:0;z-index:1;">
+              <path d="M20 90 Q60 70 100 50 Q140 30 180 20" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" fill="none" stroke-dasharray="4,3"/>
+              <circle cx="30" cy="85" r="6" fill="#0F6E56" stroke="white" stroke-width="1.5"/>
+              <circle cx="170" cy="22" r="5" fill="#E24B4A" stroke="white" stroke-width="1.5"/>
+              <circle cx="90" cy="55" r="8" fill="#EF9F27" stroke="white" stroke-width="1.5"/>
+              <text x="90" y="58" text-anchor="middle" font-size="8" fill="white">🛵</text>
+            </svg>
+            <div class="map-label">Le Bon Goût · 2,1 km</div>
+          </div>
+          <div class="course-card" style="margin-top:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+              <span style="font-size:11px; font-weight:600; color:#1c1917;">Le Bon Goût</span>
+              <span class="badge badge-blue">Restaurant</span>
+            </div>
+            <div class="route-line">
+              <div class="route-item"><div class="rdot rdot-green"></div>Fidjrossè, Cotonou</div>
+              <div class="rconnector"></div>
+              <div class="route-item"><div class="rdot rdot-red"></div>Immeuble Sèmè</div>
+            </div>
+            <div class="sep"></div>
+            <div style="display:flex; justify-content:space-between; margin-top:2px;">
+              <span style="font-size:10px; color:#78716c;">Commission</span>
+              <span style="font-size:11px; font-weight:600; color:#0F6E56;">1 020 FCFA</span>
+            </div>
+          </div>
+          <div style="margin: 4px 12px;">
+            <button class="btn btn-primary btn-block">Signaler mon arrivée</button>
+          </div>
+          <div style="margin: 4px 12px;">
+            <button class="btn btn-danger-outline btn-block" style="font-size:10px;">Annuler la course</button>
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item active">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="8" width="5" height="7" rx="1" fill="#0F6E56"/><rect x="8" y="4" width="5" height="11" rx="1" fill="#0F6E56"/></svg>
+            Courses
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+            Profil
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.2"/></svg>
+            Wallet
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ÉCRAN 3 : Preuve d'identité ===== -->
+<div class="section-tag">3. Preuve d'identité (QR / PIN)</div>
+<div class="phones-row">
+
+  <div class="phone-wrap">
+    <div class="phone-label">Affichage QR + PIN</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">Vérification collecte</span>
+          <span class="badge badge-amber">À scanner</span>
+        </div>
+        <div class="scroll-area" style="padding-top:6px;">
+          <div class="qr-zone">
+            <div style="font-size:9px; color:#78716c; margin-bottom:8px; font-weight:500;">Présentez ce QR au déposant</div>
+            <div style="width:90px; height:90px; margin: 0 auto 10px; background:#fff; border: 0.5px solid #d6d3d1; border-radius:8px; padding:8px;">
+              <svg viewBox="0 0 80 80" width="74" height="74">
+                <rect x="2" y="2" width="26" height="26" rx="3" fill="none" stroke="#1c1917" stroke-width="2.5"/>
+                <rect x="8" y="8" width="14" height="14" rx="1.5" fill="#1c1917"/>
+                <rect x="52" y="2" width="26" height="26" rx="3" fill="none" stroke="#1c1917" stroke-width="2.5"/>
+                <rect x="58" y="8" width="14" height="14" rx="1.5" fill="#1c1917"/>
+                <rect x="2" y="52" width="26" height="26" rx="3" fill="none" stroke="#1c1917" stroke-width="2.5"/>
+                <rect x="8" y="58" width="14" height="14" rx="1.5" fill="#1c1917"/>
+                <rect x="34" y="2" width="5" height="5" fill="#1c1917"/>
+                <rect x="40" y="2" width="5" height="5" fill="#1c1917"/>
+                <rect x="34" y="8" width="5" height="5" fill="#1c1917"/>
+                <rect x="46" y="8" width="5" height="5" fill="#1c1917"/>
+                <rect x="52" y="34" width="5" height="5" fill="#1c1917"/>
+                <rect x="58" y="40" width="5" height="5" fill="#1c1917"/>
+                <rect x="34" y="34" width="5" height="5" fill="#1c1917"/>
+                <rect x="40" y="40" width="5" height="5" fill="#1c1917"/>
+                <rect x="52" y="52" width="5" height="5" fill="#1c1917"/>
+                <rect x="58" y="58" width="5" height="5" fill="#1c1917"/>
+                <rect x="64" y="52" width="5" height="5" fill="#1c1917"/>
+                <rect x="34" y="52" width="5" height="5" fill="#1c1917"/>
+                <rect x="34" y="58" width="5" height="5" fill="#1c1917"/>
+                <rect x="40" y="64" width="5" height="5" fill="#1c1917"/>
+                <rect x="46" y="70" width="5" height="5" fill="#1c1917"/>
+                <rect x="2" y="34" width="5" height="5" fill="#1c1917"/>
+                <rect x="8" y="40" width="5" height="5" fill="#1c1917"/>
+                <rect x="14" y="34" width="5" height="5" fill="#1c1917"/>
+                <rect x="20" y="34" width="5" height="5" fill="#1c1917"/>
+                <rect x="26" y="40" width="5" height="5" fill="#1c1917"/>
+              </svg>
+            </div>
+            <div style="font-size:10px; color:#78716c; margin-bottom:6px;">ou donnez ce code PIN</div>
+            <div class="pin-row">
+              <div class="pin-digit">4</div>
+              <div class="pin-digit">8</div>
+              <div class="pin-digit">2</div>
+              <div class="pin-digit">1</div>
+              <div class="pin-digit">9</div>
+              <div class="pin-digit">6</div>
+            </div>
+            <div style="font-size:9px; color:#a8a29e; margin-top:4px;">Usage unique · Expire après collecte</div>
+          </div>
+          <div style="margin: 6px 12px; background:#f9f9f9; border-radius:8px; padding:8px 10px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+              <span style="font-size:9px; color:#78716c;">Commande</span>
+              <span style="font-size:9px; font-weight:600; color:#185FA5;">#4821</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+              <span style="font-size:9px; color:#78716c;">Point de collecte</span>
+              <span style="font-size:9px; font-weight:500; color:#1c1917;">Le Bon Goût</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="font-size:9px; color:#78716c;">Type de colis</span>
+              <span style="font-size:9px; font-weight:500; color:#1c1917;">Repas · Restaurant</span>
+            </div>
+          </div>
+          <div style="text-align:center; font-size:9px; color:#a8a29e; padding: 4px 14px 8px;">
+            QR lisible hors connexion
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item active">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="8" width="5" height="7" rx="1" fill="#0F6E56"/><rect x="8" y="4" width="5" height="11" rx="1" fill="#0F6E56"/></svg>
+            Courses
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+            Profil
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.2"/></svg>
+            Wallet
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- En transit -->
+  <div class="phone-wrap">
+    <div class="phone-label">En transit (GPS actif)</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <div class="info-chip">
+              <div class="dot-pulse"></div>
+              <span style="color:rgba(255,255,255,0.85);font-size:9px;">GPS actif</span>
+            </div>
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">En cours de livraison</span>
+          <span class="badge badge-blue">IN_TRANSIT</span>
+        </div>
+        <div class="scroll-area">
+          <div class="map-mock" style="height:140px; margin:8px 12px;">
+            <svg width="100%" height="100%" viewBox="0 0 200 130" style="position:absolute;top:0;left:0;z-index:1;">
+              <path d="M30 110 Q70 80 110 60 Q150 40 175 20" stroke="rgba(255,255,255,0.6)" stroke-width="2" fill="none"/>
+              <path d="M30 110 Q70 80 100 68" stroke="white" stroke-width="2.5" fill="none"/>
+              <circle cx="30" cy="110" r="5" fill="#0F6E56" stroke="white" stroke-width="1.5"/>
+              <circle cx="175" cy="20" r="6" fill="#E24B4A" stroke="white" stroke-width="1.5"/>
+              <circle cx="100" cy="68" r="9" fill="#EF9F27" stroke="white" stroke-width="2"/>
+              <text x="100" y="72" text-anchor="middle" font-size="9" fill="white">🛵</text>
+            </svg>
+            <div class="map-label">ETA : 8 min</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin: 0 12px 8px;">
+            <div style="background:#E1F5EE; border-radius:8px; padding:8px 10px; text-align:center;">
+              <div style="font-size:18px; font-weight:700; color:#0F6E56;">8</div>
+              <div style="font-size:9px; color:#78716c;">min restants</div>
+            </div>
+            <div style="background:#f5f5f4; border-radius:8px; padding:8px 10px; text-align:center;">
+              <div style="font-size:18px; font-weight:700; color:#1c1917;">2,1</div>
+              <div style="font-size:9px; color:#78716c;">km restants</div>
+            </div>
+          </div>
+          <div class="course-card" style="margin-top:0;">
+            <div style="font-size:10px; color:#78716c; margin-bottom:5px; font-weight:500;">Livraison en cours</div>
+            <div class="route-line">
+              <div class="route-item"><div class="rdot rdot-green"></div><span style="text-decoration:line-through; color:#a8a29e;">Le Bon Goût (collecté)</span></div>
+              <div class="rconnector"></div>
+              <div class="route-item"><div class="rdot rdot-red"></div>Immeuble Sèmè, Cotonou</div>
+            </div>
+            <div class="sep"></div>
+            <div style="display:flex; justify-content:space-between;">
+              <span style="font-size:9px; color:#78716c;">Position envoyée toutes les 15s</span>
+              <span style="font-size:9px; font-weight:600; color:#0F6E56;">En direct</span>
+            </div>
+          </div>
+          <div style="margin: 4px 12px 8px;">
+            <button class="btn btn-primary btn-block">Confirmer la livraison + Photo</button>
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item active">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="8" width="5" height="7" rx="1" fill="#0F6E56"/><rect x="8" y="4" width="5" height="11" rx="1" fill="#0F6E56"/></svg>
+            Courses
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+            Profil
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.2"/></svg>
+            Wallet
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== ÉCRAN 4 : Portefeuille + Profil ===== -->
+<div class="section-tag">4. Portefeuille &amp; Profil</div>
+<div class="phones-row">
+
+  <div class="phone-wrap">
+    <div class="phone-label">Portefeuille</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">Mon portefeuille</span>
+        </div>
+        <div class="scroll-area">
+          <div class="wallet-card">
+            <div class="wallet-label">Solde disponible</div>
+            <div class="wallet-amount">18 450 <span class="wallet-fcfa">FCFA</span></div>
+            <div class="wallet-row">
+              <div><div class="wallet-mini">Ce mois</div><div class="wallet-mini-val">+32 140 FCFA</div></div>
+              <div><div class="wallet-mini">Retraits</div><div class="wallet-mini-val">−15 000 FCFA</div></div>
+              <div><div class="wallet-mini">Courses</div><div class="wallet-mini-val">48</div></div>
+            </div>
+          </div>
+          <div style="margin: 6px 12px;">
+            <button class="btn btn-primary btn-block" style="font-size:11px;">Retirer vers Mobile Money</button>
+          </div>
+          <div style="display:flex; gap:6px; margin: 0 12px 4px;">
+            <button class="btn btn-block" style="flex:1; font-size:10px; background:#E6F1FB; border-color:#B5D4F4; color:#185FA5;">MTN MoMo</button>
+            <button class="btn btn-block" style="flex:1; font-size:10px; background:#faeeda; border-color:#FAC775; color:#854F0B;">Moov Africa</button>
+          </div>
+          <div class="section-inner" style="margin-top:6px;">Historique</div>
+          <div class="hist-row">
+            <div class="hist-left">
+              <div class="hist-icon hist-icon-green">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div><div class="hist-name">Pharmacie → Cadjehoun</div><div class="hist-date">Aujourd'hui · 09:12</div></div>
+            </div>
+            <div class="hist-amount-pos">+722</div>
+          </div>
+          <div class="hist-row">
+            <div class="hist-left">
+              <div class="hist-icon hist-icon-green">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div><div class="hist-name">Le Bon Goût → Sèmè</div><div class="hist-date">Hier · 14:33</div></div>
+            </div>
+            <div class="hist-amount-pos">+1 020</div>
+          </div>
+          <div class="hist-row">
+            <div class="hist-left">
+              <div class="hist-icon hist-icon-red">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 6h10" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div><div class="hist-name">Retrait Mobile Money</div><div class="hist-date">Il y a 3 jours</div></div>
+            </div>
+            <div class="hist-amount-neg">−5 000</div>
+          </div>
+          <div class="hist-row">
+            <div class="hist-left">
+              <div class="hist-icon hist-icon-green">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+              </div>
+              <div><div class="hist-name">TopMarché → Agla</div><div class="hist-date">Il y a 4 jours · 11:05</div></div>
+            </div>
+            <div class="hist-amount-pos">+1 615</div>
+          </div>
+          <div style="height:8px;"></div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="8" width="5" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="4" width="5" height="11" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+            Courses
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="currentColor" stroke-width="1.2"/></svg>
+            Profil
+          </div>
+          <div class="nav-item active">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" fill="#0F6E56"/><path d="M1 7h14" stroke="white" stroke-width="1.2"/></svg>
+            Wallet
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profil -->
+  <div class="phone-wrap">
+    <div class="phone-label">Profil livreur</div>
+    <div class="phone">
+      <div class="phone-btn-right"></div>
+      <div class="phone-btn-left-1"></div>
+      <div class="phone-btn-left-2"></div>
+      <div class="phone-btn-left-3"></div>
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg viewBox="0 0 14 8" fill="none"><rect x="0.5" y="0.5" width="11" height="7" rx="1.5" stroke="white" stroke-width="1"/><rect x="12" y="2" width="1.5" height="4" rx="0.5" fill="white"/><rect x="1.5" y="1.5" width="8" height="5" rx="0.5" fill="white"/></svg>
+          </div>
+        </div>
+        <div class="top-bar">
+          <span class="top-bar-title">Mon profil</span>
+          <span class="badge badge-green">KYC validé</span>
+        </div>
+        <div class="scroll-area">
+          <div style="padding: 14px 14px 8px; text-align:center;">
+            <div class="profile-avatar">MK</div>
+            <div style="font-size:13px; font-weight:600; color:#1c1917; margin-bottom:2px;">Moussa Kéita</div>
+            <div class="stars">★★★★★</div>
+            <div style="font-size:10px; color:#78716c; margin-top:2px;">4,8 / 5 · 124 courses</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin: 0 12px 8px;">
+            <div style="background:#E1F5EE; border-radius:8px; padding:8px 10px; text-align:center;">
+              <div style="font-size:16px; font-weight:700; color:#0F6E56;">124</div>
+              <div style="font-size:9px; color:#78716c;">Courses totales</div>
+            </div>
+            <div style="background:#f5f5f4; border-radius:8px; padding:8px 10px; text-align:center;">
+              <div style="font-size:16px; font-weight:700; color:#1c1917;">98 %</div>
+              <div style="font-size:9px; color:#78716c;">Taux de succès</div>
+            </div>
+          </div>
+          <div class="sep" style="margin: 0 12px;"></div>
+          <div class="row-info"><span class="row-lbl">Téléphone</span><span class="row-val">+229 97 XX XX XX</span></div>
+          <div class="row-info"><span class="row-lbl">Véhicule</span><span class="row-val">Moto · Honda CB 125</span></div>
+          <div class="row-info"><span class="row-lbl">Zone principale</span><span class="row-val">Akpakpa · Cotonou</span></div>
+          <div class="row-info"><span class="row-lbl">Membre depuis</span><span class="row-val">Mars 2026</span></div>
+          <div class="sep" style="margin: 4px 12px;"></div>
+          <div style="padding: 4px 12px; display:flex; align-items:center; justify-content:space-between;">
+            <span style="font-size:10px; color:#1c1917;">Disponible pour les courses</span>
+            <div style="width:34px; height:18px; border-radius:9px; background:#0F6E56; position:relative;">
+              <div style="position:absolute; top:2px; right:2px; width:14px; height:14px; border-radius:50%; background:white;"></div>
+            </div>
+          </div>
+          <div style="margin: 8px 12px 10px;">
+            <button class="btn btn-block btn-danger-outline" style="font-size:10px;">Se déconnecter</button>
+          </div>
+        </div>
+        <div class="nav-bar">
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="8" width="5" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><rect x="8" y="4" width="5" height="11" rx="1" stroke="currentColor" stroke-width="1.2"/></svg>
+            Courses
+          </div>
+          <div class="nav-item active">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" fill="#0F6E56"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="#0F6E56"/></svg>
+            Profil
+          </div>
+          <div class="nav-item">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.2"/></svg>
+            Wallet
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

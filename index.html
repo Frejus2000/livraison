@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SwiftDrop — Maquettes</title>
+<style>
+:root {
+  --green: #0F6E56;
+  --green-mid: #1D9E75;
+  --green-light: #e1f5ee;
+  --green-dark: #085041;
+  --font: 'Segoe UI', system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: #f0faf6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+/* Background decoration */
+body::before {
+  content: '';
+  position: fixed;
+  top: -120px; right: -120px;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(29,158,117,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -100px; left: -100px;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15,110,86,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.container {
+  width: 100%;
+  max-width: 780px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.logo-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.logo-mark {
+  width: 48px; height: 48px;
+  background: var(--green);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(15,110,86,0.35);
+}
+.logo-mark svg { width: 26px; height: 26px; }
+.logo-text { font-size: 26px; font-weight: 700; color: #1c1917; letter-spacing: -0.5px; }
+.logo-sub {
+  display: inline-block;
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+}
+.header-title {
+  font-size: 15px;
+  color: #78716c;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.header-title strong { color: #1c1917; font-weight: 600; }
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.divider-line { flex: 1; height: 0.5px; background: #d6d3d1; }
+.divider-label { font-size: 10px; font-weight: 600; color: #a8a29e; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Cards grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: #fff;
+  border: 0.5px solid #e7e5e4;
+  border-radius: 16px;
+  padding: 24px 22px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--green));
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(15,110,86,0.12);
+  border-color: #b5d4c8;
+}
+.card:hover::before { opacity: 1; }
+.card:active { transform: translateY(-1px); }
+
+.card-icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.card-icon svg { width: 22px; height: 22px; }
+
+.card-body {}
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1c1917;
+  margin-bottom: 6px;
+  letter-spacing: -0.2px;
+}
+.card-desc {
+  font-size: 11px;
+  color: #78716c;
+  line-height: 1.55;
+}
+
+.card-screens {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.screen-chip {
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-weight: 500;
+  background: #f5f5f4;
+  color: #78716c;
+  border: 0.5px solid #e7e5e4;
+}
+
+.card-arrow {
+  position: absolute;
+  bottom: 20px; right: 20px;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--card-icon-bg, #e1f5ee);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.card:hover .card-arrow {
+  background: var(--green);
+  transform: translateX(2px);
+}
+.card:hover .card-arrow svg path { stroke: white; }
+
+/* Card color variants */
+.card-client { --card-accent: #0F6E56; --card-icon-bg: #e1f5ee; }
+.card-client .card-icon { background: #e1f5ee; }
+.card-client .card-label { color: #0F6E56; }
+
+.card-livreur { --card-accent: #1D9E75; --card-icon-bg: #d1f5e8; }
+.card-livreur .card-icon { background: #d1f5e8; }
+.card-livreur .card-label { color: #1D9E75; }
+
+.card-partenaire { --card-accent: #185FA5; --card-icon-bg: #dbeeff; }
+.card-partenaire .card-icon { background: #dbeeff; }
+.card-partenaire .card-label { color: #185FA5; }
+.card-partenaire:hover { box-shadow: 0 8px 28px rgba(24,95,165,0.12); border-color: #b5d0f0; }
+.card-partenaire:hover .card-arrow { background: #185FA5; }
+
+.card-admin { --card-accent: #7c3aed; --card-icon-bg: #f3e8ff; }
+.card-admin .card-icon { background: #f3e8ff; }
+.card-admin .card-label { color: #7c3aed; }
+.card-admin:hover { box-shadow: 0 8px 28px rgba(124,58,237,0.12); border-color: #d4b8f8; }
+.card-admin:hover .card-arrow { background: #7c3aed; }
+
+/* Footer */
+.footer {
+  text-align: center;
+  border-top: 0.5px solid #e7e5e4;
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.footer-item {
+  font-size: 11px;
+  color: #a8a29e;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.footer-dot { width: 4px; height: 4px; border-radius: 50%; background: #d6d3d1; }
+.version-badge {
+  background: var(--green-light);
+  color: var(--green-dark);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-wrap">
+      <div class="logo-mark">
+        <svg viewBox="0 0 26 26" fill="none">
+          <circle cx="13" cy="13" r="11" stroke="white" stroke-width="2"/>
+          <path d="M8 13 L13 8 L18 13 L15.5 13 L15.5 18 L10.5 18 L10.5 13 Z" fill="white"/>
+        </svg>
+      </div>
+      <div class="logo-text">SwiftDrop</div>
+    </div>
+    <div>
+      <div class="logo-sub">Maquettes · Version 1.0</div>
+    </div>
+    <div class="header-title">
+      <strong>Plateforme collaborative de livraison</strong> — Bénin · Cotonou<br>
+      Sélectionnez une interface pour visualiser les maquettes
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-label">Choisir une interface</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-grid">
+
+    <!-- App Client -->
+    <a class="card card-client" href="swiftdrop_app_client.html">
+      <div class="card-icon">
+        <svg viewBox="0 0 22 22" fill="none">
+          <rect x="5" y="2" width="12" height="18" rx="2.5" stroke="#0F6E56" stroke-width="1.6"/>
+          <circle cx="11" cy="17" r="1" fill="#0F6E56"/>
+          <path d="M8 6h6M8 9h4" stroke="#0F6E56" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Mobile iOS / Android</div>
+        <div class="card-title">App Client</div>
+        <div class="card-desc">Commander une livraison, payer en avance, suivre en temps réel et confirmer la réception.</div>
+      </div>
+      <div class="card-screens">
+        <span class="screen-chip">Onboarding</span>
+        <span class="screen-chip">Accueil</span>
+        <span class="screen-chip">Commande</span>
+        <span class="screen-chip">Paiement</span>
+        <span class="screen-chip">Suivi GPS</span>
+        <span class="screen-chip">Réception</span>
+        <span class="screen-chip">Profil</span>
+      </div>
+      <div class="card-arrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </a>
+
+    <!-- App Livreur -->
+    <a class="card card-livreur" href="swiftdrop_app_livreur.html">
+      <div class="card-icon">
+        <svg viewBox="0 0 22 22" fill="none">
+          <path d="M3 14 L8 14 L8 17 L14 17 L14 14 L19 14" stroke="#1D9E75" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="7" cy="17" r="2" stroke="#1D9E75" stroke-width="1.4"/>
+          <circle cx="15" cy="17" r="2" stroke="#1D9E75" stroke-width="1.4"/>
+          <path d="M8 14 L8 10 L13 10 L16 14" stroke="#1D9E75" stroke-width="1.4"/>
+          <path d="M13 10 L13 7 L16 7 L16 10" stroke="#1D9E75" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Mobile iOS / Android</div>
+        <div class="card-title">App Livreur</div>
+        <div class="card-desc">Inscription KYC, voir les courses disponibles, accepter, présenter le QR/PIN et gérer son portefeuille.</div>
+      </div>
+      <div class="card-screens">
+        <span class="screen-chip">Inscription KYC</span>
+        <span class="screen-chip">Courses dispo</span>
+        <span class="screen-chip">QR / PIN</span>
+        <span class="screen-chip">Portefeuille</span>
+      </div>
+      <div class="card-arrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </a>
+
+    <!-- Portail Partenaire -->
+    <a class="card card-partenaire" href="swiftdrop_portail_partenaire.html">
+      <div class="card-icon">
+        <svg viewBox="0 0 22 22" fill="none">
+          <rect x="2" y="4" width="18" height="14" rx="2" stroke="#185FA5" stroke-width="1.6"/>
+          <path d="M2 8h18" stroke="#185FA5" stroke-width="1.4"/>
+          <rect x="5" y="11" width="5" height="4" rx="1" fill="#185FA5" opacity="0.3"/>
+          <rect x="12" y="11" width="5" height="2" rx="0.5" fill="#185FA5" opacity="0.5"/>
+          <rect x="12" y="14" width="3" height="1" rx="0.5" fill="#185FA5" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Web Tablette / PC</div>
+        <div class="card-title">Portail Partenaire</div>
+        <div class="card-desc">Dashboard commandes, lancer les livraisons, vérifier les livreurs par QR/PIN, historique et configuration.</div>
+      </div>
+      <div class="card-screens">
+        <span class="screen-chip">Dashboard</span>
+        <span class="screen-chip">Livraison</span>
+        <span class="screen-chip">Vérif. livreur</span>
+        <span class="screen-chip">Historique</span>
+        <span class="screen-chip">Config.</span>
+      </div>
+      <div class="card-arrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </a>
+
+    <!-- Dashboard Admin -->
+    <a class="card card-admin" href="swiftdrop_dashboard_admin.html">
+      <div class="card-icon">
+        <svg viewBox="0 0 22 22" fill="none">
+          <rect x="2" y="2" width="8" height="8" rx="2" stroke="#7c3aed" stroke-width="1.6"/>
+          <rect x="12" y="2" width="8" height="8" rx="2" stroke="#7c3aed" stroke-width="1.6"/>
+          <rect x="2" y="12" width="8" height="8" rx="2" stroke="#7c3aed" stroke-width="1.6"/>
+          <rect x="12" y="12" width="8" height="8" rx="2" fill="#7c3aed" opacity="0.15" stroke="#7c3aed" stroke-width="1.6"/>
+          <path d="M15 15.5h4M15 17.5h2" stroke="#7c3aed" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-label">Web — Accès total</div>
+        <div class="card-title">Dashboard Admin</div>
+        <div class="card-desc">Supervision temps réel, validation KYC, gestion des partenaires, commissions et litiges.</div>
+      </div>
+      <div class="card-screens">
+        <span class="screen-chip">Supervision</span>
+        <span class="screen-chip">KYC livreurs</span>
+        <span class="screen-chip">Partenaires</span>
+        <span class="screen-chip">Commissions</span>
+        <span class="screen-chip">Litiges</span>
+      </div>
+      <div class="card-arrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#7c3aed" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-label">PRD</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- Cards -->
+  <div class="cards-grid">
+
+    <!-- PRD -->
+    <a class="card card-client" href="SwiftDrop_PRD_v1.0.pdf" target="_blank">
+      <div class="card-icon">
+        <svg viewBox="0 0 22 22" fill="none">
+          <rect x="5" y="2" width="12" height="18" rx="2.5" stroke="#0F6E56" stroke-width="1.6"/>
+          <circle cx="11" cy="17" r="1" fill="#0F6E56"/>
+          <path d="M8 6h6M8 9h4" stroke="#0F6E56" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="card-body">
+        <div class="card-title">PRD</div>
+        <div class="card-desc">Explication de tous les fonctions</div>
+      </div>
+    
+      <div class="card-arrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+    </a>
+
+    </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-item">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="4.5" stroke="#a8a29e" stroke-width="1.1"/><path d="M5.5 3.5v2.5l1.5 1" stroke="#a8a29e" stroke-width="1.1" stroke-linecap="round"/></svg>
+      Avril 2026
+    </div>
+    <div class="footer-dot"></div>
+    <div class="footer-item">
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="4" r="2.2" stroke="#a8a29e" stroke-width="1.1"/><path d="M1.5 10c0-2.2 1.8-4 4-4s4 1.8 4 4" stroke="#a8a29e" stroke-width="1.1"/></svg>
+      Bénin · Cotonou
+    </div>
+    <div class="footer-dot"></div>
+    <span class="version-badge">PRD v1.0</span>
+    <div class="footer-dot"></div>
+    <div class="footer-item">4 interfaces · 22 écrans</div>
+  </div>
+
+</div>
+
+</body>
+</html>
